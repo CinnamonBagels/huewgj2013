@@ -41,6 +41,8 @@ namespace HueWGJ2013
             Content.RootDirectory = "HueWGJ2013Content";
             games.Add("Pear");
             mg["Pear"] = new Pear(Content);
+            games.Add("HotAir");
+            mg["HotAir"] = new HotAir(Content);
 
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;
