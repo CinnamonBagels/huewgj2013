@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace HueWGJ2013.minigames
 {
-    class Pear : AMinigame
+    class minigame_Example : AMinigame
     {
         //Texture2D img_happy;
         //Texture2D img_sad;
@@ -20,7 +20,7 @@ namespace HueWGJ2013.minigames
         Vector2 pos2 = new Vector2(25, 25);
         Vector2 pos3 = new Vector2(250, 25);
 
-        public Pear(ContentManager c)
+        public minigame_Example(ContentManager c)
             : base(c)
         {
             this.Content = c;

@@ -12,16 +12,25 @@ using Microsoft.Xna.Framework.Media;
 
 namespace HueWGJ2013.minigames
 {
-    class minigame_Example : AMinigame
+    class Pear : AMinigame
     {
-        //Texture2D img_happy;
-        //Texture2D img_sad;
+        private MouseState oldState;
+        MouseState mstate;
+        Color mouseCoordColor = Color.Blue;
+
+        Texture2D img_pear;
+        Texture2D img_tree;
 
         Vector2 pos = new Vector2(50, 50);
         Vector2 pos2 = new Vector2(25, 25);
         Vector2 pos3 = new Vector2(100, 25);
 
-        public minigame_Example(ContentManager c)
+        List<Texture2D> pears = new List<Texture2D>();
+        List<Vector2> pearPos = new List<Vector2>();
+        List<float> pearScale = new List<float>();
+        List<bool> pearClicked = new List<bool>();
+
+        public Pear(ContentManager c)
             : base(c)
         {
             this.Content = c;
@@ -30,14 +39,15 @@ namespace HueWGJ2013.minigames
         public override void load(SpriteFont font)
         {
             this.font = font;
-            //img_happy = Content.Load<Texture2D>("minigames/Example/happy.jpg");
-            //img_sad   = Content.Load<Texture2D>("minigames/Example/sad.jpg");
+            img_pear = Content.Load<Texture2D>("minigames/Pear/pear");
+            img_tree   = Content.Load<Texture2D>("minigames/Pear/tree");
         }
 
         public override void draw(SpriteBatch sb)
         {
             sb.DrawString(font, "Pear", pos2, Color.Red);
             sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
+            sb.Draw(img_tree, new Vector2(128.0f, 0.0f), Color.White);
             switch (state)
             {
                 case State.INTRO:
@@ -46,27 +56,51 @@ namespace HueWGJ2013.minigames
                     break;
                 case State.PLAY:
                     sb.DrawString(font, "Playing", pos, Color.Red);
-                    //sb.Draw(img_happy, pos, Color.White);
+                    for (int i = 0; i < pearPos.Count; i++)
+                    {
+                        sb.Draw(pears[i], pearPos[i], null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), pearScale[i], SpriteEffects.None, 0.0f);
+                    }
                     break;
                 case State.LOSE:
                     sb.DrawString(font, "LOSE!", pos, Color.Green);
-                    //sb.Draw(img_happy, pos, Color.White);
+                    for (int i = 0; i < pearPos.Count; i++)
+                    {
+                        sb.Draw(pears[i], pearPos[i], null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), pearScale[i], SpriteEffects.None, 0.0f);
+                    }
                     break;
                 case State.WIN:
                     sb.DrawString(font, "WIN!", pos, Color.Green);
-                    //sb.Draw(img_happy, pos, Color.White);
+                    for (int i = 0; i < pearPos.Count; i++)
+                    {
+                        sb.Draw(pears[i], pearPos[i], null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), pearScale[i], SpriteEffects.None, 0.0f);
+                    }
                     break;
             }
         }
 
         public override bool update(KeyboardState kb, MouseState ms)
         {
+            mstate = ms;
             speed = Game1.speed;
             timer += speed;
 
             switch (state)
             {
                 case State.START:
+                    pearPos.Clear();
+                    pearScale.Clear();
+                    pears.Clear();
+                    pearClicked.Clear();
+                    Vector2 temp;
+                    Random rand = new Random();
+                    for (int i = 0; i < 5; i++)
+                    {
+                        temp = new Vector2(randomGen(rand, 102.4f, 0.0f) + 102.4f * i + 204.8f, randomGen(rand, 334.0f, 0.0f) + 117.0f);
+                        pearPos.Add(temp);
+                        pearScale.Add(1.0f);
+                        pears.Add(img_pear);
+                        pearClicked.Add(false);
+                    }
                     state = State.INTRO;
                     break;
                 case State.INTRO:
@@ -86,11 +120,37 @@ namespace HueWGJ2013.minigames
                     }
                     else
                     {
-                        if (kb.IsKeyDown(Keys.Space))
+                        if (ms.LeftButton == ButtonState.Pressed && oldState.LeftButton == ButtonState.Released)
                         {
-                            stateTimer = 0.0f;
-                            state = State.WIN;
+                            var mousePos = new Point(ms.X, ms.Y);
+
+                            for (int i = 0; i < pearPos.Count; i++)
+                            {
+                                if (pears[i].Bounds.Contains(new Point((int)(mousePos.X - pearPos[i].X), (int)(mousePos.Y - pearPos[i].Y))) && !pearClicked[i])
+                                {
+                                    mouseCoordColor = Color.Green;
+                                    pearPos[i] = new Vector2(pearPos[i].X - img_pear.Width/2.0f, pearPos[i].Y - img_pear.Height/2.0f);
+                                    pearScale[i] += 1.0f;
+                                    pearClicked[i] = true;
+
+                                    for (int j = 0; j < pearClicked.Count; j++)
+                                    {
+                                        if (!pearClicked[j])
+                                            break;
+                                        else if (j == pearClicked.Count - 1)
+                                        {
+                                            stateTimer = 0.0f;
+                                            state = State.WIN;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
                         }
+                        else
+                            mouseCoordColor = Color.Blue;
+
+                        oldState = ms; // this reassigns the old state so that it is ready for next time
                     }
                     break;
                 case State.WIN:

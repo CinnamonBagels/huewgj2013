@@ -32,9 +32,9 @@ namespace HueWGJ2013.minigames
         protected SpriteFont font;
         protected float timer;                   //Should not exceed gameLength
         protected float stateTimer;              //Timer for current state
-        protected float gameIntroTimer = 10.0f;
+        protected float gameIntroTimer = 5.0f;
         protected float gamePlayTimer = 15.0f;
-        protected float gameEndTimer = 10.0f;
+        protected float gameEndTimer = 5.0f;
         protected float speed;
 
         /// <summary>
@@ -64,5 +64,12 @@ namespace HueWGJ2013.minigames
         /// What to do during an update based on the state variable
         /// </summary>
         public abstract bool update(KeyboardState kb, MouseState ms);
+        /// <summary>
+        /// Helper method to generate random numbers with given parameters
+        /// </summary>
+        public float randomGen(Random rand, float range, float offset)
+        {
+            return ((float)rand.Next((int)range)) - offset;
+        }
     }
 }

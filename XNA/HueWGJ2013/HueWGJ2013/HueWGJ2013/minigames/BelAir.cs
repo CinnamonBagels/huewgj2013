@@ -86,7 +86,6 @@ namespace HueWGJ2013.minigames
                 case State.EXIT:
                     // Last shit here
                     return false;
-                    break;
                 default:
                     break;
             }

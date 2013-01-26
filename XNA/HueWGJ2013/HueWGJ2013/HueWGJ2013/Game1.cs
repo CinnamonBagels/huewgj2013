@@ -32,17 +32,22 @@ namespace HueWGJ2013
         string curGame = "minigame_Example";
 
         public static float timer = 0.0f;
-        public static float speed = 0.1f;
+        public static float speed = 0.05f;
         public static HueGraphics hueGraphics;
 
         public Game1()
         {            
             graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            games.Add("minigame_Example");
-            mg["minigame_Example"] = new minigame_Example(Content);
+            Content.RootDirectory = "HueWGJ2013Content";
+            //games.Add("minigame_Example");
+            //mg["minigame_Example"] = new minigame_Example(Content);
             games.Add("Pear");
             mg["Pear"] = new Pear(Content);
+
+            graphics.PreferredBackBufferHeight = 768;
+            graphics.PreferredBackBufferWidth = 1024;
+
+            this.IsMouseVisible = true;
         }
 
         /// <summary>
@@ -93,6 +98,12 @@ namespace HueWGJ2013
             timer++;
             ks = Keyboard.GetState();
             ms = Mouse.GetState();
+
+            if (ks.IsKeyDown(Keys.Escape))
+            {
+                Exit();
+            }
+
             if (!((Minigame)mg[curGame]).update(ks, ms))
             {
                 speed *= 1.05f;
