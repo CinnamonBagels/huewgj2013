@@ -39,8 +39,6 @@ namespace HueWGJ2013
         {            
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "HueWGJ2013Content";
-            //games.Add("minigame_Example");
-            //mg["minigame_Example"] = new minigame_Example(Content);
             games.Add("Pear");
             mg["Pear"] = new Pear(Content);
 

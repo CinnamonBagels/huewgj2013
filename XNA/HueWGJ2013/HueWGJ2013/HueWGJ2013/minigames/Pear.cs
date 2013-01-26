@@ -16,15 +16,17 @@ namespace HueWGJ2013.minigames
     {
         private MouseState oldState;
         MouseState mstate;
-        Color mouseCoordColor = Color.Blue;
 
+        //Relevant textures
         Texture2D img_pear;
         Texture2D img_tree;
 
+        //Positions for debug text
         Vector2 pos = new Vector2(50, 50);
         Vector2 pos2 = new Vector2(25, 25);
         Vector2 pos3 = new Vector2(100, 25);
 
+        //Lists to keep track of pears
         List<Texture2D> pears = new List<Texture2D>();
         List<Vector2> pearPos = new List<Vector2>();
         List<float> pearScale = new List<float>();
@@ -52,9 +54,8 @@ namespace HueWGJ2013.minigames
             {
                 case State.INTRO:
                     sb.DrawString(font, "Intro", pos, Color.Red);
-                    //sb.Draw(img_happy, pos, Color.White);
                     break;
-                case State.PLAY:
+                case State.PLAY:                                     // Star drawing pears
                     sb.DrawString(font, "Playing", pos, Color.Red);
                     for (int i = 0; i < pearPos.Count; i++)
                     {
@@ -62,7 +63,7 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.LOSE:
-                    sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    sb.DrawString(font, "LOSE!", pos, Color.Green);  // Pears persist through game end
                     for (int i = 0; i < pearPos.Count; i++)
                     {
                         sb.Draw(pears[i], pearPos[i], null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), pearScale[i], SpriteEffects.None, 0.0f);
@@ -87,14 +88,17 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.START:
+                    // Pear lists init
                     pearPos.Clear();
                     pearScale.Clear();
                     pears.Clear();
                     pearClicked.Clear();
+
                     Vector2 temp;
                     Random rand = new Random();
                     for (int i = 0; i < 5; i++)
                     {
+                        // Pear position randomization, stratified along X-axis, random along Y-axis
                         temp = new Vector2(randomGen(rand, 102.4f, 0.0f) + 102.4f * i + 204.8f, randomGen(rand, 334.0f, 0.0f) + 117.0f);
                         pearPos.Add(temp);
                         pearScale.Add(1.0f);
@@ -126,17 +130,19 @@ namespace HueWGJ2013.minigames
 
                             for (int i = 0; i < pearPos.Count; i++)
                             {
+                                // If the mouse pointer is contained in the rectangle created by the pear texture at time of click...
                                 if (pears[i].Bounds.Contains(new Point((int)(mousePos.X - pearPos[i].X), (int)(mousePos.Y - pearPos[i].Y))) && !pearClicked[i])
                                 {
-                                    mouseCoordColor = Color.Green;
-                                    pearPos[i] = new Vector2(pearPos[i].X - img_pear.Width/2.0f, pearPos[i].Y - img_pear.Height/2.0f);
-                                    pearScale[i] += 1.0f;
-                                    pearClicked[i] = true;
+                                    pearPos[i] = new Vector2(pearPos[i].X - img_pear.Width/2.0f, pearPos[i].Y - img_pear.Height/2.0f); // Bias pear position to counteract movement from scaling
+                                    pearScale[i] += 1.0f;   // double area of pear, "growing"
+                                    pearClicked[i] = true;  // This pear has been clicked
 
                                     for (int j = 0; j < pearClicked.Count; j++)
                                     {
+                                        // Any pears left?
                                         if (!pearClicked[j])
                                             break;
+                                        // No pears left, end game with WIN
                                         else if (j == pearClicked.Count - 1)
                                         {
                                             stateTimer = 0.0f;
@@ -147,8 +153,6 @@ namespace HueWGJ2013.minigames
                                 }
                             }
                         }
-                        else
-                            mouseCoordColor = Color.Blue;
 
                         oldState = ms; // this reassigns the old state so that it is ready for next time
                     }
