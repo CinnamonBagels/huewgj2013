@@ -43,6 +43,8 @@ namespace HueWGJ2013
             mg["Pear"] = new Pear(Content);
             games.Add("HotAir");
             mg["HotAir"] = new HotAir(Content);
+            games.Add("Trillionaire");
+            mg["Trillionaire"] = new Trillionaire(Content);
 
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;

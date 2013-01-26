@@ -11,23 +11,21 @@ using Microsoft.Xna.Framework.Media;
 
 namespace HueWGJ2013.minigames
 {
-    class HotAir : AMinigame
+    class Trillionaire : AMinigame
     {
-        Texture2D img_balloon;
+        //Texture2D img_happy;
         //Texture2D img_sad;
 
         Vector2 pos = new Vector2(50, 50);
         Vector2 pos2 = new Vector2(25, 25);
         Vector2 pos3 = new Vector2(250, 25);
 
-        // Scale for balloon
-        float scale = 1.0f;
-        Vector2 balloonPos = new Vector2(512.0f, 651.0f);
+        static int zeroes = 0;
+        static string total = "$";
+        Vector2 moneyPos = new Vector2(512.0f, 334.0f);
+        bool keyDown = false;
 
-        // Pump mechanic
-        bool down = false;
-
-        public HotAir(ContentManager c)
+        public Trillionaire(ContentManager c)
             : base(c)
         {
             this.Content = c;
@@ -36,34 +34,33 @@ namespace HueWGJ2013.minigames
         public override void load(SpriteFont font)
         {
             this.font = font;
-            img_balloon = Content.Load<Texture2D>("minigames/HotAir/balloon");
+            //img_happy = Content.Load<Texture2D>("minigames/Example/happy");
             //img_sad   = Content.Load<Texture2D>("minigames/Example/sad");
         }
 
         public override void draw(SpriteBatch sb)
         {
-            sb.DrawString(font, "HotAir", pos2, Color.Red);
+            sb.DrawString(font, "Trillionaire", pos2, Color.Red);
             sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
             switch (state)
             {
                 case State.INTRO:
                     sb.DrawString(font, "Intro", pos, Color.Red);
-                    sb.Draw(img_balloon, balloonPos, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0.0f);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.PLAY:
                     sb.DrawString(font, "Playing", pos, Color.Red);
-                    sb.Draw(img_balloon, balloonPos, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0.0f);
+                    sb.DrawString(font, total, moneyPos, Color.Green);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.LOSE:
                     sb.DrawString(font, "LOSE!", pos, Color.Green);
-                    sb.Draw(img_balloon, balloonPos, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0.0f);
+                    sb.DrawString(font, total, moneyPos, Color.Green);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.WIN:
                     sb.DrawString(font, "WIN!", pos, Color.Green);
-                    sb.Draw(img_balloon, balloonPos, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0.0f);
+                    sb.DrawString(font, total, moneyPos, Color.Green);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
             }
@@ -77,8 +74,9 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.START:
-                    scale = 0.25f;
-                    balloonPos = new Vector2(512.0f, 651.0f);
+                    moneyPos = new Vector2(512.0f, 334.0f);
+                    total = "$";
+                    zeroes = 0;
 
                     state = State.INTRO;
                     break;
@@ -92,30 +90,34 @@ namespace HueWGJ2013.minigames
                     break;
                 case State.PLAY:
                     stateTimer += speed;
-
-                    scale -= 0.1f * speed;
-                    balloonPos = new Vector2(balloonPos.X + (img_balloon.Width * 0.1f * speed)/2.0f, balloonPos.Y + (img_balloon.Height * 0.1f * speed));
-
-                    if (stateTimer >= gamePlayTimer || scale <= 0.05)
+                    if (stateTimer >= gamePlayTimer)
                     {
                         stateTimer = 0.0f;
                         state = State.LOSE;
                     }
                     else
                     {
-                        if ((kb.IsKeyDown(Keys.Up) && !down) || (kb.IsKeyDown(Keys.Down) && down))
+                        if(!keyDown && zeroes == 0 && !total.Equals("$1") && (kb.IsKeyDown(Keys.D1) || kb.IsKeyDown(Keys.NumPad1)))
                         {
-                            down = !down;
-
-                            scale += 0.075f;
-                            balloonPos = new Vector2(balloonPos.X - (img_balloon.Width*0.075f)/2.0f, balloonPos.Y - (img_balloon.Height*0.075f));
-
-                            if (scale >= 3.0f)
-                            {
-                                stateTimer = 0.0f;
-                                state = State.WIN;
-                                break;
-                            }
+                            keyDown = true;
+                            total = total + "1";
+                            moneyPos = new Vector2(moneyPos.X - 6.0f, moneyPos.Y);
+                        }
+                        else if (!keyDown && (zeroes == 0 || zeroes < 12) && (kb.IsKeyDown(Keys.D0) || kb.IsKeyDown(Keys.NumPad0)))
+                        {
+                            keyDown = true;
+                            total = total + "0";
+                            zeroes++;
+                            moneyPos = new Vector2(moneyPos.X - 6.0f, moneyPos.Y);
+                        }
+                        else if (zeroes == 12)
+                        {
+                            stateTimer = 0.0f;
+                            state = State.WIN;
+                        }
+                        else if (!kb.IsKeyDown(Keys.D1) && !kb.IsKeyDown(Keys.D0) && !kb.IsKeyDown(Keys.NumPad0) && !kb.IsKeyDown(Keys.NumPad1))
+                        {
+                            keyDown = false;
                         }
                     }
                     break;
