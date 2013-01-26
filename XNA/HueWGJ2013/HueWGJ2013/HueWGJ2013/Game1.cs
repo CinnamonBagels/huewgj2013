@@ -45,6 +45,8 @@ namespace HueWGJ2013
             mg["HotAir"] = new HotAir(Content);
             games.Add("Trillionaire");
             mg["Trillionaire"] = new Trillionaire(Content);
+            games.Add("BelAir");
+            mg["BelAir"] = new BelAir(Content);
 
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;

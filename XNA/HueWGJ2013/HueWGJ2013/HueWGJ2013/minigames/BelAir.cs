@@ -16,7 +16,7 @@ namespace HueWGJ2013.minigames
     class BelAir:AMinigame
     {
         Texture2D img_baller;
-        Texture2D 1px;
+        Texture2D pixel1;
 
         Rectangle powerBg;
         Rectangle powerWin;
@@ -38,8 +38,9 @@ namespace HueWGJ2013.minigames
 
         public override void load(SpriteFont font)
         {
-            this.font = font;
+            this.font  = font;
             img_baller = Content.Load<Texture2D>("minigames/BelAir/baller");
+            pixel1     = Game1.hueGraphics.getSolidTexture();
         }
 
         public override void draw(SpriteBatch sb)
@@ -48,7 +49,9 @@ namespace HueWGJ2013.minigames
             {
                 case State.PLAY:
                     sb.Draw(img_baller, ballerPos, Color.White);
-                    sb.Draw(
+                    sb.Draw(pixel1, powerBg, Color.Red);
+                    sb.Draw(pixel1, powerWin, Color.Green);
+                    sb.Draw(pixel1, powerCur, Color.Black);
                     break;
                 case State.WIN:
                     sb.Draw(img_baller, ballerPos, Color.White);
@@ -108,7 +111,7 @@ namespace HueWGJ2013.minigames
                     }
                     if (!kb.IsKeyDown(Keys.Space) && throwing == false)
                     {
-                        if( (powerCurPos.X >= powerWinPos.X) && (powerCurPos.X <= (powerWinPos.X + powerWin.Width) )
+                        if( (powerCurPos.X >= powerWinPos.X) && (powerCurPos.X <= (powerWinPos.X + powerWin.Width) ) )
                         {
                             state = State.WIN;
                         }
