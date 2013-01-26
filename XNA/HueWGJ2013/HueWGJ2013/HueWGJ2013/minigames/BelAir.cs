@@ -16,6 +16,7 @@ namespace HueWGJ2013.minigames
     class BelAir:AMinigame
     {
         Texture2D img_baller;
+        Texture2D 1px;
 
         Rectangle powerBg;
         Rectangle powerWin;
@@ -27,6 +28,7 @@ namespace HueWGJ2013.minigames
         Vector2 ballerPos;
 
         int barDir;
+        bool throwing;
 
         public BelAir(ContentManager c)
             : base(c)
@@ -46,6 +48,7 @@ namespace HueWGJ2013.minigames
             {
                 case State.PLAY:
                     sb.Draw(img_baller, ballerPos, Color.White);
+                    sb.Draw(
                     break;
                 case State.WIN:
                     sb.Draw(img_baller, ballerPos, Color.White);
@@ -78,10 +81,42 @@ namespace HueWGJ2013.minigames
                     powerCur.Width = 2;
                     powerCur.Height = 20;
                     powerCur.Offset((int)powerCurPos.X, (int)powerCurPos.Y);
+
+                    throwing = false;
+                    barDir = 0;
+                    //Ready to go!
+                    state = State.PLAY;
                     break;
                 case State.PLAY:
-                    if (kb.IsKeyDown(Keys.Space))
-                        state = State.WIN;
+                    if (kb.IsKeyDown(Keys.Space) && throwing == false)
+                    {
+                        throwing = true;
+                        barDir = 1;
+                        powerCurPos.X += barDir;
+                    }
+                    if (kb.IsKeyDown(Keys.Space) && throwing == true)
+                    {
+                        if (powerCurPos.X >= (powerBgPos.X + powerBg.Width))
+                        {
+                            barDir = -1;
+                        }
+                        else
+                        {
+                            barDir = 1;
+                        }
+                        powerCurPos.X += barDir;
+                    }
+                    if (!kb.IsKeyDown(Keys.Space) && throwing == false)
+                    {
+                        if( (powerCurPos.X >= powerWinPos.X) && (powerCurPos.X <= (powerWinPos.X + powerWin.Width) )
+                        {
+                            state = State.WIN;
+                        }
+                        else
+                        {
+                            state = State.LOSE;
+                        }
+                    }
                     break;
                 case State.EXIT:
                     // Last shit here
