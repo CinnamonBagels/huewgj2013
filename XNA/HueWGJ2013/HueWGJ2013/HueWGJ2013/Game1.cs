@@ -72,14 +72,16 @@ namespace HueWGJ2013
         /// </summary>
         protected override void LoadContent()
         {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            hueGraphics = new HueGraphics(GraphicsDevice);
             defaultFont = Content.Load<SpriteFont>("defaultFont");
             foreach (DictionaryEntry minigame in mg)
             {
                 ((Minigame)minigame.Value).load(defaultFont);
             }
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            hueGraphics = new HueGraphics(GraphicsDevice);
+            
+            
             // TODO: use this.Content to load your game content here
         }
 

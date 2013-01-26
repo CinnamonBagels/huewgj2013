@@ -26,9 +26,13 @@ namespace HueWGJ2013.minigames
         Vector2 powerWinPos;
         Vector2 powerCurPos;
         Vector2 ballerPos;
+        
+        Vector2 pos2 = new Vector2(25, 25);
+        Vector2 pos3 = new Vector2(250, 25);
 
-        int barDir;
+        float barDir;
         bool throwing;
+        bool hasThrown;
 
         public BelAir(ContentManager c)
             : base(c)
@@ -45,6 +49,8 @@ namespace HueWGJ2013.minigames
 
         public override void draw(SpriteBatch sb)
         {
+            sb.DrawString(font, "BelAir", pos2, Color.Red);
+            sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
             switch (state)
             {
                 case State.PLAY:
@@ -57,18 +63,24 @@ namespace HueWGJ2013.minigames
                     sb.Draw(img_baller, ballerPos, Color.White);
                     sb.DrawString(font, "WIN!", ballerPos, Color.Green);
                     break;
+                case State.LOSE:
+                    sb.Draw(img_baller, ballerPos, Color.White);
+                    sb.DrawString(font, "LOSE!", ballerPos, Color.Green);
+                    break;
             }
         }
 
         public override bool update(KeyboardState kb, MouseState ms)
         {
+            speed = Game1.speed;
+            timer += speed;
             switch(state)
             {
                 case State.START:
-                    powerBgPos = new Vector2(20,20);
-                    powerWinPos = new Vector2(80,20);
-                    powerCurPos = new Vector2(20,20);
-                    ballerPos = new Vector2(20, 180);
+                    powerBgPos = new Vector2(30,380);
+                    powerWinPos = new Vector2(90,380);
+                    powerCurPos = new Vector2(30,380);
+                    ballerPos = new Vector2(30, 400);
 
                     powerBg = new Rectangle();
                     powerBg.Width = 100;
@@ -86,39 +98,74 @@ namespace HueWGJ2013.minigames
                     powerCur.Offset((int)powerCurPos.X, (int)powerCurPos.Y);
 
                     throwing = false;
+                    hasThrown = false;
                     barDir = 0;
                     //Ready to go!
-                    state = State.PLAY;
+                    stateTimer += speed;
+                    if (stateTimer >= gameIntroTimer)
+                    {
+                        stateTimer = 0.0f;
+                        state = State.PLAY;
+                    }
                     break;
+
                 case State.PLAY:
-                    if (kb.IsKeyDown(Keys.Space) && throwing == false)
+                    stateTimer += speed;
+                    if (stateTimer >= gamePlayTimer)
+                    {
+                        stateTimer = 0.0f;
+                        state = State.LOSE;
+                    }
+                    if (kb.IsKeyDown(Keys.Space) && throwing == false && hasThrown == false)
                     {
                         throwing = true;
-                        barDir = 1;
-                        powerCurPos.X += barDir;
+                        barDir = 1* speed;
+                        powerCur.X += (int) Math.Ceiling(barDir);
                     }
-                    if (kb.IsKeyDown(Keys.Space) && throwing == true)
+                    if (kb.IsKeyDown(Keys.Space) && throwing == true && hasThrown == false)
                     {
-                        if (powerCurPos.X >= (powerBgPos.X + powerBg.Width))
+                        if (powerCur.X >= (powerBg.X + powerBg.Width) && barDir > 0)
                         {
-                            barDir = -1;
+                            powerCur.X = powerBg.X + powerBg.Width;
+                            barDir = -1 * speed;
                         }
-                        else
+                        else if(powerCur.X <= powerBg.X && barDir < 0)
                         {
-                            barDir = 1;
+                            barDir = 1 * speed;
                         }
-                        powerCurPos.X += barDir;
+                        powerCur.X += (int)Math.Ceiling(barDir);
                     }
-                    if (!kb.IsKeyDown(Keys.Space) && throwing == false)
+                    if (!kb.IsKeyDown(Keys.Space) && throwing == true && hasThrown == false)
                     {
-                        if( (powerCurPos.X >= powerWinPos.X) && (powerCurPos.X <= (powerWinPos.X + powerWin.Width) ) )
+                        hasThrown = true;
+                        if( (powerCur.X >= powerWin.X) && (powerCur.X <= (powerWin.X + powerWin.Width) ) )
                         {
+                            stateTimer = 0.0f;
                             state = State.WIN;
                         }
                         else
                         {
+                            stateTimer = 0.0f;
                             state = State.LOSE;
                         }
+                    }
+                    break;
+
+                case State.WIN:
+                    stateTimer += speed;
+                    if (stateTimer >= gameEndTimer)
+                    {
+                        stateTimer = 0.0f;
+                        state = State.EXIT;
+                    }
+                    break;
+
+                case State.LOSE:
+                    stateTimer += speed;
+                    if (stateTimer >= gameEndTimer)
+                    {
+                        stateTimer = 0.0f;
+                        state = State.EXIT;
                     }
                     break;
                 case State.EXIT:
