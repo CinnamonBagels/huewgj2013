@@ -24,6 +24,7 @@ namespace HueWGJ2013.minigames
         static string total = "$";
         Vector2 moneyPos = new Vector2(512.0f, 334.0f);
         bool keyDown = false;
+        bool pressed1 = false;
 
         public Trillionaire(ContentManager c)
             : base(c)
@@ -66,10 +67,12 @@ namespace HueWGJ2013.minigames
             }
         }
 
-        public override bool update(KeyboardState kb, MouseState ms)
+        public override int update(KeyboardState kb, MouseState ms)
         {
             speed = Game1.speed;
             timer += speed;
+
+            int gameStatus = -1;
 
             switch (state)
             {
@@ -97,13 +100,14 @@ namespace HueWGJ2013.minigames
                     }
                     else
                     {
-                        if(!keyDown && zeroes == 0 && !total.Equals("$1") && (kb.IsKeyDown(Keys.D1) || kb.IsKeyDown(Keys.NumPad1)))
+                        if(!keyDown && !pressed1 && zeroes == 0 && !total.Equals("$1") && (kb.IsKeyDown(Keys.D1) || kb.IsKeyDown(Keys.NumPad1)))
                         {
                             keyDown = true;
                             total = total + "1";
                             moneyPos = new Vector2(moneyPos.X - 6.0f, moneyPos.Y);
+                            pressed1 = true;
                         }
-                        else if (!keyDown && (zeroes == 0 || zeroes < 12) && (kb.IsKeyDown(Keys.D0) || kb.IsKeyDown(Keys.NumPad0)))
+                        else if (!keyDown && pressed1 && (zeroes == 0 || zeroes < 12) && (kb.IsKeyDown(Keys.D0) || kb.IsKeyDown(Keys.NumPad0)))
                         {
                             keyDown = true;
                             total = total + "0";
@@ -126,6 +130,7 @@ namespace HueWGJ2013.minigames
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
+                        gameStatus = 1;
                         state = State.EXIT;
                     }
                     break;
@@ -134,11 +139,12 @@ namespace HueWGJ2013.minigames
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
+                        gameStatus = 0;
                         state = State.EXIT;
                     }
                     break;
                 case State.EXIT:
-                    return false;
+                    return gameStatus;
                 default:
                     break;
             }

@@ -39,14 +39,16 @@ namespace HueWGJ2013
         {            
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "HueWGJ2013Content";
-            games.Add("Pear");
-            mg["Pear"] = new Pear(Content);
-            games.Add("HotAir");
-            mg["HotAir"] = new HotAir(Content);
-            games.Add("Trillionaire");
-            mg["Trillionaire"] = new Trillionaire(Content);
-            games.Add("BelAir");
-            mg["BelAir"] = new BelAir(Content);
+            //games.Add("Pear");
+            //mg["Pear"] = new Pear(Content);
+            //games.Add("HotAir");
+            //mg["HotAir"] = new HotAir(Content);
+            //games.Add("Trillionaire");
+            //mg["Trillionaire"] = new Trillionaire(Content);
+            //games.Add("BelAir");
+            //mg["BelAir"] = new BelAir(Content);
+            games.Add("Foursquare");
+            mg["Foursquare"] = new Foursquare(Content);
 
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;
@@ -110,7 +112,7 @@ namespace HueWGJ2013
                 Exit();
             }
 
-            if (!((Minigame)mg[curGame]).update(ks, ms))
+            if (((Minigame)mg[curGame]).update(ks, ms) != -1)
             {
                 speed *= 1.05f;
                 curGame = newGame();

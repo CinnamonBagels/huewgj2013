@@ -70,10 +70,13 @@ namespace HueWGJ2013.minigames
             }
         }
 
-        public override bool update(KeyboardState kb, MouseState ms)
+        public override int update(KeyboardState kb, MouseState ms)
         {
             speed = Game1.speed;
             timer += speed;
+
+            int gameStatus = -1;
+
             switch(state)
             {
                 case State.START:
@@ -156,21 +159,21 @@ namespace HueWGJ2013.minigames
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
+                        gameStatus = 1;
                         state = State.EXIT;
                     }
                     break;
-
                 case State.LOSE:
                     stateTimer += speed;
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
+                        gameStatus = 0;
                         state = State.EXIT;
                     }
                     break;
                 case State.EXIT:
-                    // Last shit here
-                    return false;
+                    return gameStatus;
                 default:
                     break;
             }

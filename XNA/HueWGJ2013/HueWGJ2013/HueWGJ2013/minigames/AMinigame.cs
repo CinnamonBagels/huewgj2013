@@ -63,7 +63,7 @@ namespace HueWGJ2013.minigames
         /// <summary>
         /// What to do during an update based on the state variable
         /// </summary>
-        public abstract bool update(KeyboardState kb, MouseState ms);
+        public abstract int update(KeyboardState kb, MouseState ms);
         /// <summary>
         /// Helper method to generate random numbers with given parameters
         /// </summary>
