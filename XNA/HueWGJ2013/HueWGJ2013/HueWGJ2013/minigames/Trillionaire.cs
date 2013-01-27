@@ -80,6 +80,7 @@ namespace HueWGJ2013.minigames
                     moneyPos = new Vector2(512.0f, 334.0f);
                     total = "$";
                     zeroes = 0;
+                    pressed1 = false;
 
                     state = State.INTRO;
                     break;

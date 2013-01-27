@@ -61,7 +61,12 @@ namespace HueWGJ2013
 
             this.IsMouseVisible = true;
             rand = new Random();
-            playerScore = new List<int>(4);
+            playerScore = new List<int>();
+            for (int i = 0; i < 4; i++)
+            {
+                playerScore.Add(0);
+            }
+
         }
 
         /// <summary>
@@ -120,11 +125,11 @@ namespace HueWGJ2013
                 Exit();
             }
 
-            tempVal = (Minigame) mg[curGame].update(ks, ms);
+            tempVal = ((Minigame) mg[curGame]).update(ks, ms);
             if (tempVal >= 0)
             {
                 if (tempVal == 1)
-                   playerScore[currentPlayer]++;
+                    playerScore[currentPlayer>=playerScore.Count?0:currentPlayer]++;
                 
                 if (gamesPlayed <= 10)
                 {
@@ -133,8 +138,8 @@ namespace HueWGJ2013
                 }
 
                 currentPlayer++;
-                if (currentPlayer == playerScore.Count)
-                    currentPlayer = 0;
+                //if (currentPlayer >= playerScore.Count)
+                //    currentPlayer = 0;
 
                 curGame = newGame();
                 ((Minigame)mg[curGame]).init();
@@ -153,6 +158,10 @@ namespace HueWGJ2013
             GraphicsDevice.Clear(Color.White);
             
             spriteBatch.Begin();
+            for (int i = 0; i < playerScore.Count; i++)
+            {
+                spriteBatch.DrawString(defaultFont, "" + playerScore[i], new Vector2(25.0f, 384.0f + i*25.0f), Color.Red);
+            }
             ((Minigame)mg[curGame]).draw(spriteBatch);
             spriteBatch.End();
             // TODO: Add your drawing code here
