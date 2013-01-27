@@ -118,7 +118,7 @@ namespace HueWGJ2013.minigames
                     break;
             }
             timer = 0.0f;
-            return true;
+            return -1;
         }
     }
 }

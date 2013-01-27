@@ -177,7 +177,7 @@ namespace HueWGJ2013.minigames
                 default:
                     break;
             }
-            return true;
+            return -1;
         }
     }
 }
