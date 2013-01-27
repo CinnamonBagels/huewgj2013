@@ -38,6 +38,7 @@ namespace HueWGJ2013
         int tempVal = 0;
         List<int> playerScore;
         int currentPlayer = 0;
+        int numPlayers = 4;
 
         public static float timer = 0.0f;
         public static float speed = 0.05f;
@@ -63,8 +64,9 @@ namespace HueWGJ2013
 
             this.IsMouseVisible = true;
             rand = new Random();
+
             playerScore = new List<int>();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < numPlayers; i++)
             {
                 playerScore.Add(0);
             }
@@ -131,7 +133,7 @@ namespace HueWGJ2013
             if (tempVal >= 0)
             {
                 if (tempVal == 1)
-                    playerScore[currentPlayer>=playerScore.Count?0:currentPlayer]++;
+                    playerScore[currentPlayer]++;
                 
                 if (gamesPlayed <= 10)
                 {
@@ -140,8 +142,8 @@ namespace HueWGJ2013
                 }
 
                 currentPlayer++;
-                //if (currentPlayer >= playerScore.Count)
-                //    currentPlayer = 0;
+                if (currentPlayer >= numPlayers)
+                    currentPlayer = 0;
 
                 curGame = newGame();
                 ((Minigame)mg[curGame]).init();
