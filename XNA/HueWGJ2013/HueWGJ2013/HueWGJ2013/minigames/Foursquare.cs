@@ -80,10 +80,15 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.INTRO:
+                    Game1.hueGraphics.drawInstructionText("Check-in Foursquare! (Left Mouse Button)");
                     sb.DrawString(font, "Intro", pos, Color.Red);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.PLAY:
+                    if (stateTimer < 3f)
+                    {
+                        Game1.hueGraphics.drawInstructionText("GO!!!");
+                    }
                     sb.DrawString(font, "Playing", pos, Color.Red);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
@@ -121,8 +126,6 @@ namespace HueWGJ2013.minigames
                     state = State.INTRO;
                     break;
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Check-in Foursquare! (Left Mouse Button)");
-
                     stateTimer += speed;
                     if (stateTimer >= gameIntroTimer)
                     {

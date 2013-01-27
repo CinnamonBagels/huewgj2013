@@ -64,10 +64,15 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.INTRO:
+                    Game1.hueGraphics.drawInstructionText("Breed a hare! (Space)");
                     sb.DrawString(font, "Intro", pos, Color.Red);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.PLAY:
+                    if (stateTimer < 3f)
+                    {
+                        Game1.hueGraphics.drawInstructionText("GO!!!");
+                    }
                     sb.DrawString(font, "Playing", pos, Color.Red);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
@@ -130,6 +135,7 @@ namespace HueWGJ2013.minigames
             if (offset >= 110.0f)
             {
                 offset = 0.0f;
+                attemptingToMate = false;
                 generateNewGround();
             }
 
@@ -229,7 +235,6 @@ namespace HueWGJ2013.minigames
                         else
                         {
                             Random rand2 = new Random();
-                            attemptingToMate = false;
                             foreach (Rectangle mate in mateRectangles)
                             {
                                 if (mate.Contains(new Point((int)foot.X, (int)(foot.Y - 20.0))))
@@ -237,7 +242,7 @@ namespace HueWGJ2013.minigames
                                     if (!attemptingToMate)
                                     {
                                         attemptingToMate = true;
-                                        if (rand2.Next(100) < 3)
+                                        if (rand2.Next(100) < 20)
                                         {
                                             stateTimer = 0.0f;
                                             state = State.WIN;

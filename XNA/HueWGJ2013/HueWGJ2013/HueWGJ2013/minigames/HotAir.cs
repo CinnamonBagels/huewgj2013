@@ -100,8 +100,8 @@ namespace HueWGJ2013.minigames
                 case State.PLAY:
                     stateTimer += speed;
 
-                    scale -= 0.1f * speed;
-                    balloonPos = new Vector2(balloonPos.X + (img_balloon.Width * 0.1f * speed)/2.0f, balloonPos.Y + (img_balloon.Height * 0.1f * speed));
+                    scale -= 0.08f * speed;
+                    balloonPos = new Vector2(balloonPos.X + (img_balloon.Width * 0.08f * speed)/2.0f, balloonPos.Y + (img_balloon.Height * 0.08f * speed));
 
                     if (stateTimer >= gamePlayTimer || scale <= 0.05)
                     {

@@ -55,12 +55,16 @@ namespace HueWGJ2013
             mg["HotAir"] = new HotAir(Content);
             games.Add("Trillionaire");
             mg["Trillionaire"] = new Trillionaire(Content);
+            games.Add("Foursquare");
+            mg["Foursquare"] = new Foursquare(Content);
             games.Add("BelAir");
             mg["BelAir"] = new BelAir(Content);
             games.Add("GrowDownThere");
             mg["GrowDownThere"] = new GrowDownThere(Content);
             games.Add("Hare");
             mg["Hare"] = new Hare(Content);
+            games.Add("Mare");
+            mg["Mare"] = new Mare(Content);
 
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;
