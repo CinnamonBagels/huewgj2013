@@ -121,6 +121,8 @@ namespace HueWGJ2013.minigames
                     state = State.INTRO;
                     break;
                 case State.INTRO:
+                    Game1.hueGraphics.drawInstructionText("Check-in Foursquare! (Left Mouse Button)");
+
                     stateTimer += speed;
                     if (stateTimer >= gameIntroTimer)
                     {

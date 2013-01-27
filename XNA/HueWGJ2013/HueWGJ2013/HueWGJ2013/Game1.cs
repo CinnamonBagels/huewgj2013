@@ -39,7 +39,7 @@ namespace HueWGJ2013
         int tempVal = 0;
         List<int> playerScore;
         int currentPlayer = 0;
-        int numPlayers = 4;
+        int numPlayers = 5;
 
         public static float timer = 0.0f;
         public static float speed = 0.05f;

@@ -200,6 +200,7 @@ namespace HueWGJ2013.minigames
                     alive = true;
                     stateTimer += speed;
                     alreadyGap = true;
+
                     if (stateTimer >= gameIntroTimer)
                     {
                         stateTimer = 0.0f;

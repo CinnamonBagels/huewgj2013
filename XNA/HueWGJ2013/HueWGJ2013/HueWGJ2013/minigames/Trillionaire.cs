@@ -90,6 +90,8 @@ namespace HueWGJ2013.minigames
                     state = State.INTRO;
                     break;
                 case State.INTRO:
+                    Game1.hueGraphics.drawInstructionText("Become a trillionaire! (1/0 keys)");
+
                     stateTimer += speed;
                     if (stateTimer >= gameIntroTimer)
                     {

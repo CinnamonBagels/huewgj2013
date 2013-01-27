@@ -51,7 +51,7 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Grow down there! (Arrows)");
+                    Game1.hueGraphics.drawInstructionText("Grow down there! (Right Arrow)");
                     sb.DrawString(font, "Intro", pos, Color.Red);
                     sb.Draw(img_guy, guyColl, Color.White);
                     anim_lady.draw(sb, ladyInitalPos);
