@@ -47,7 +47,7 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Hot air! (Arrows)");
+                    Game1.hueGraphics.drawInstructionText("Blow hot air! (Up/Down Arrows)");
                     sb.DrawString(font, "Intro", pos, Color.Red);
                     sb.Draw(img_balloon, balloonPos, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0.0f);
                     //sb.Draw(img_happy, pos, Color.White);
