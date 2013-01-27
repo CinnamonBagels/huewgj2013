@@ -80,8 +80,10 @@ namespace HueWGJ2013.minigames
                 case State.START:
                     gameStatus = -1;
 
+                    Random rand = new Random();
+
                     powerBgPos = new Vector2(30,380);
-                    powerWinPos = new Vector2(90,380);
+                    powerWinPos = new Vector2(rand.Next(45) + 45,380);
                     powerCurPos = new Vector2(30,380);
                     ballerPos = new Vector2(30, 400);
 

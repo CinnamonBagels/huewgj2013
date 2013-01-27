@@ -109,8 +109,8 @@ namespace HueWGJ2013.minigames
                         {
                             down = !down;
 
-                            scale += 0.075f;
-                            balloonPos = new Vector2(balloonPos.X - (img_balloon.Width*0.075f)/2.0f, balloonPos.Y - (img_balloon.Height*0.075f));
+                            scale += 0.1f;
+                            balloonPos = new Vector2(balloonPos.X - (img_balloon.Width*0.1f)/2.0f, balloonPos.Y - (img_balloon.Height*0.1f));
 
                             if (scale >= 2.75f)
                             {

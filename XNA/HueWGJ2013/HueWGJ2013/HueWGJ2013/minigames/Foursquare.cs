@@ -25,8 +25,6 @@ namespace HueWGJ2013.minigames
         Vector2 pos2 = new Vector2(25, 25);
         Vector2 pos3 = new Vector2(250, 25);
 
-        int gameStatus = -1;
-
         List<Rectangle> zones = new List<Rectangle>();
 
         Vector2 center = new Vector2(512, 384);
@@ -103,7 +101,7 @@ namespace HueWGJ2013.minigames
         public override int update(KeyboardState kb, MouseState ms)
         {
             mstate = ms;
-            //speed = Game1.speed;
+            speed = Game1.speed;
             timer += speed * 2.0f;
 
             mouseDown = (ms.LeftButton == ButtonState.Pressed);

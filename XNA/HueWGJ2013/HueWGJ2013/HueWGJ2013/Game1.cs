@@ -58,6 +58,8 @@ namespace HueWGJ2013
             mg["BelAir"] = new BelAir(Content);
             games.Add("GrowDownThere");
             mg["GrowDownThere"] = new GrowDownThere(Content);
+            games.Add("Hare");
+            mg["Hare"] = new Hare(Content);
 
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;
@@ -137,7 +139,7 @@ namespace HueWGJ2013
                 
                 if (gamesPlayed <= 10)
                 {
-                    speed *= 1.05f;
+                    speed *= 1.025f;
                     gamesPlayed = 0;
                 }
 

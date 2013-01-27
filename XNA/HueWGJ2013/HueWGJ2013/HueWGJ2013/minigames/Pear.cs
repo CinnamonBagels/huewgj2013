@@ -81,8 +81,8 @@ namespace HueWGJ2013.minigames
 
         public override int update(KeyboardState kb, MouseState ms)
         {
-            mstate = ms;
             speed = Game1.speed;
+            mstate = ms;
             timer += speed;
 
             switch (state)
