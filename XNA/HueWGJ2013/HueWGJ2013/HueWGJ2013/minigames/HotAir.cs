@@ -110,7 +110,7 @@ namespace HueWGJ2013.minigames
                     }
                     else
                     {
-                        if ((kb.IsKeyDown(Keys.Up) && !down) || (kb.IsKeyDown(Keys.Down) && down))
+                        if (((kb.IsKeyDown(Keys.Up) && !down) || (kb.IsKeyDown(Keys.Down) && down)) && (kb.IsKeyUp(Keys.Down) || kb.IsKeyUp(Keys.Up)))
                         {
                             down = !down;
 

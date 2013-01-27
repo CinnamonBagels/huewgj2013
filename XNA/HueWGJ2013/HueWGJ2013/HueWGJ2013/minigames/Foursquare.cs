@@ -103,8 +103,8 @@ namespace HueWGJ2013.minigames
         public override int update(KeyboardState kb, MouseState ms)
         {
             mstate = ms;
-            speed = Game1.speed;
-            timer += speed;
+            //speed = Game1.speed;
+            timer += speed * 2.0f;
 
             mouseDown = (ms.LeftButton == ButtonState.Pressed);
 
