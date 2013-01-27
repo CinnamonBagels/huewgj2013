@@ -27,6 +27,7 @@ namespace HueWGJ2013
         MouseState ms;
 
         SpriteFont defaultFont;
+        SpriteFont instructionFont;
 
         Hashtable mg = new Hashtable();
         List<string> games = new List<string>();
@@ -90,8 +91,9 @@ namespace HueWGJ2013
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            hueGraphics = new HueGraphics(GraphicsDevice);
             defaultFont = Content.Load<SpriteFont>("defaultFont");
+            instructionFont = Content.Load<SpriteFont>("instructionFont");
+            hueGraphics = new HueGraphics(GraphicsDevice,instructionFont,spriteBatch);
             foreach (DictionaryEntry minigame in mg)
             {
                 ((Minigame)minigame.Value).load(defaultFont);

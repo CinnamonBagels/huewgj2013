@@ -53,9 +53,14 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.INTRO:
+                    Game1.hueGraphics.drawInstructionText("Grow a pear! (Mouse)");
                     sb.DrawString(font, "Intro", pos, Color.Red);
                     break;
                 case State.PLAY:                                     // Star drawing pears
+                    if (stateTimer < 3f)
+                    {
+                        Game1.hueGraphics.drawInstructionText("GO!!!");
+                    }
                     sb.DrawString(font, "Playing", pos, Color.Red);
                     for (int i = 0; i < pearPos.Count; i++)
                     {
