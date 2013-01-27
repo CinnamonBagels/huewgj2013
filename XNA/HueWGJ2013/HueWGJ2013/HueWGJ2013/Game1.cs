@@ -158,9 +158,12 @@ namespace HueWGJ2013
             GraphicsDevice.Clear(Color.White);
             
             spriteBatch.Begin();
+            spriteBatch.DrawString(defaultFont, "Current player: " + (currentPlayer + 1), 
+                    new Vector2(25.0f, 359.0f), Color.Red);
             for (int i = 0; i < playerScore.Count; i++)
             {
-                spriteBatch.DrawString(defaultFont, "" + playerScore[i], new Vector2(25.0f, 384.0f + i*25.0f), Color.Red);
+                spriteBatch.DrawString(defaultFont, "Player " + i + ": "
+                    + playerScore[i], new Vector2(25.0f, 384.0f + i * 25.0f), Color.Red);
             }
             ((Minigame)mg[curGame]).draw(spriteBatch);
             spriteBatch.End();
