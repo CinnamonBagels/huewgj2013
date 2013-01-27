@@ -55,6 +55,8 @@ namespace HueWGJ2013
             mg["Trillionaire"] = new Trillionaire(Content);
             games.Add("BelAir");
             mg["BelAir"] = new BelAir(Content);
+            games.Add("GrowDownThere");
+            mg["GrowDownThere"] = new GrowDownThere(Content);
 
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;
