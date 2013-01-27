@@ -85,6 +85,7 @@ namespace HueWGJ2013
         protected override void Initialize()
         {
             base.Initialize();
+            curGameNum = games.Count;
             curGame = newGame();
         }
 
@@ -183,7 +184,7 @@ namespace HueWGJ2013
         protected string newGame()
         {
             curGameNum++;
-            if (curGameNum == games.Count)
+            if (curGameNum >= games.Count)
             {
                 for (int i = 0; i < games.Count; i++ )
                 {
