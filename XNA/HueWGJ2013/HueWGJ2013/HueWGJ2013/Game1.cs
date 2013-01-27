@@ -17,7 +17,8 @@ namespace HueWGJ2013
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-
+    /// 
+    
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
@@ -30,6 +31,13 @@ namespace HueWGJ2013
         Hashtable mg = new Hashtable();
         List<string> games = new List<string>();
         string curGame = "minigame_Example";
+        int gamesPlayed = 0;
+        int curGameNum = 0;
+        Random rand = null;
+        string temp = "";
+        int tempVal = 0;
+        List<int> playerScore;
+        int currentPlayer = 0;
 
         public static float timer = 0.0f;
         public static float speed = 0.05f;
@@ -47,13 +55,13 @@ namespace HueWGJ2013
             mg["Trillionaire"] = new Trillionaire(Content);
             games.Add("BelAir");
             mg["BelAir"] = new BelAir(Content);
-            games.Add("Foursquare");
-            mg["Foursquare"] = new Foursquare(Content);
 
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;
 
             this.IsMouseVisible = true;
+            rand = new Random();
+            playerScore = new List<int>(4);
         }
 
         /// <summary>
@@ -112,9 +120,22 @@ namespace HueWGJ2013
                 Exit();
             }
 
-            if (((Minigame)mg[curGame]).update(ks, ms) >= 0)
+            tempVal = (Minigame) mg[curGame].update(ks, ms);
+            if (tempVal >= 0)
             {
-                speed *= 1.05f;
+                if (tempVal == 1)
+                   playerScore[currentPlayer]++;
+                
+                if (gamesPlayed <= 10)
+                {
+                    speed *= 1.05f;
+                    gamesPlayed = 0;
+                }
+
+                currentPlayer++;
+                if (currentPlayer == playerScore.Count)
+                    currentPlayer = 0;
+
                 curGame = newGame();
                 ((Minigame)mg[curGame]).init();
             }
@@ -141,9 +162,19 @@ namespace HueWGJ2013
 
         protected string newGame()
         {
-            int size = games.Count;
-            Random rand = new Random();
-            return games[rand.Next(size)];
+            curGameNum++;
+            if (curGameNum == games.Count)
+            {
+                for (int i = 0; i < games.Count; i++ )
+                {
+                    tempVal = rand.Next(games.Count);
+                    temp = games[tempVal];
+                    games[tempVal] = games[i];
+                    games[i] = temp;
+                }
+                curGameNum = 0;
+            }
+            return games[curGameNum];
         }
     }
 }
