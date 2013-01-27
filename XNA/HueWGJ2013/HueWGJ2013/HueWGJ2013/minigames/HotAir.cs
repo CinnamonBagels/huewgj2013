@@ -110,7 +110,7 @@ namespace HueWGJ2013.minigames
                             scale += 0.075f;
                             balloonPos = new Vector2(balloonPos.X - (img_balloon.Width*0.075f)/2.0f, balloonPos.Y - (img_balloon.Height*0.075f));
 
-                            if (scale >= 3.0f)
+                            if (scale >= 2.75f)
                             {
                                 stateTimer = 0.0f;
                                 state = State.WIN;
