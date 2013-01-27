@@ -36,6 +36,7 @@ namespace HueWGJ2013.minigames
         protected float gamePlayTimer = 15.0f;
         protected float gameEndTimer = 5.0f;
         protected float speed;
+        protected int gameStatus = -1;
 
         /// <summary>
         /// Constructor

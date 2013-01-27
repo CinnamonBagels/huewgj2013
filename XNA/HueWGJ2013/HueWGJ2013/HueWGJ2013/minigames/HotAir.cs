@@ -74,11 +74,11 @@ namespace HueWGJ2013.minigames
             speed = Game1.speed;
             timer += speed;
 
-            int gameStatus = -1;
-
             switch (state)
             {
                 case State.START:
+                    gameStatus = -1;
+
                     scale = 0.25f;
                     balloonPos = new Vector2(512.0f, 651.0f);
 

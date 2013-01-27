@@ -112,7 +112,7 @@ namespace HueWGJ2013
                 Exit();
             }
 
-            if (((Minigame)mg[curGame]).update(ks, ms) != -1)
+            if (((Minigame)mg[curGame]).update(ks, ms) >= 0)
             {
                 speed *= 1.05f;
                 curGame = newGame();

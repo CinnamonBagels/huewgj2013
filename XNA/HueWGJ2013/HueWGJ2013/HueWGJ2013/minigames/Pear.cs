@@ -85,11 +85,11 @@ namespace HueWGJ2013.minigames
             speed = Game1.speed;
             timer += speed;
 
-            int gameStatus = -1;
-
             switch (state)
             {
                 case State.START:
+                    gameStatus = -1;
+
                     // Pear lists init
                     pearPos.Clear();
                     pearScale.Clear();

@@ -75,11 +75,11 @@ namespace HueWGJ2013.minigames
             speed = Game1.speed;
             timer += speed;
 
-            int gameStatus = -1;
-
             switch(state)
             {
                 case State.START:
+                    gameStatus = -1;
+
                     powerBgPos = new Vector2(30,380);
                     powerWinPos = new Vector2(90,380);
                     powerCurPos = new Vector2(30,380);
