@@ -41,7 +41,7 @@ namespace HueWGJ2013.minigames
         public override void load(SpriteFont font)
         {
             this.font = font;
-            imgBear = Content.Load<Texture2D>("minigames/FightABear/zbear");
+            imgBear = Content.Load<Texture2D>("minigames/FightABear/laserbear");
             imgMan = Content.Load<Texture2D>("minigames/FightABear/overlymanlyman");
             ground = Game1.hueGraphics.getSolidTexture();
             imgPunch = Content.Load<Texture2D>("minigames/FightABear/falconpunch");

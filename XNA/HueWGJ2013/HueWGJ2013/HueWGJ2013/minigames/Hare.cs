@@ -31,7 +31,7 @@ namespace HueWGJ2013.minigames
         bool alreadyGap = false;
         float winX = 0.0f;
 
-        float gravity = -0.5f - Game1.speed;
+        float gravity = -0.75f - Game1.speed;
         float yVelocity = 0.0f;
         bool onGround = false;
         Vector2 foot = new Vector2(440.0f, 192.0f);
@@ -100,8 +100,8 @@ namespace HueWGJ2013.minigames
                 case State.WIN:
                     offset = 0.0f;
                     //sb.Draw(img_hare, new Vector2((float)(winX), (float)(foot.Y - img_hare.Height)), Color.White);
-                    hare.goToFrame(2);
-                    hare.draw(sb, new Vector2((float)(winX+12.0), (float)(foot.Y - img_hare.Height - 16.0)));
+                    hare.goToFrame(3);
+                    hare.draw(sb, new Vector2((float)(winX+12.0), (float)(foot.Y - img_hare.Height - 8.0)));
                     break;
                 default:
                     //sb.Draw(img_hare, new Vector2((float)(foot.X - img_hare.Width / 2.0), (float)(foot.Y - img_hare.Height)), Color.White);
@@ -238,7 +238,7 @@ namespace HueWGJ2013.minigames
                     {
                         if (onGround && kb.IsKeyDown(Keys.Space))
                         {
-                            yVelocity = 10.0f + 2 * Game1.speed;
+                            yVelocity = 12.5f + 2 * Game1.speed;
                         }
 
                         if (!alive)
