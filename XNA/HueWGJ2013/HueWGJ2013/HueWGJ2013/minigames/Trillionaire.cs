@@ -26,6 +26,13 @@ namespace HueWGJ2013.minigames
         bool keyDown = false;
         bool pressed1 = false;
 
+        Texture2D atm;
+
+        SoundEffect snd_win;
+        SoundEffect snd_lose;
+        Song bgm;
+        bool playedEndSound = false;
+
         public Trillionaire(ContentManager c)
             : base(c)
         {
@@ -35,12 +42,15 @@ namespace HueWGJ2013.minigames
         public override void load(SpriteFont font)
         {
             this.font = font;
-            //img_happy = Content.Load<Texture2D>("minigames/Example/happy");
-            //img_sad   = Content.Load<Texture2D>("minigames/Example/sad");
+            snd_win = Content.Load<SoundEffect>("minigames/Trillionare/getmoneygetpaid");
+            snd_lose = Content.Load<SoundEffect>("minigames/default_fail");
+            bgm = Content.Load<Song>("minigames/Trillionare/bgm_omf");
+            atm = Content.Load<Texture2D>("minigames/Trillionare/cashmoney");
         }
 
         public override void draw(SpriteBatch sb)
         {
+            sb.Draw(atm, new Vector2(512 - atm.Width/2,  334 - atm.Height/2), Color.White);
             sb.DrawString(font, "Trillionaire", pos2, Color.Red);
             sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
             switch (state)
@@ -70,6 +80,7 @@ namespace HueWGJ2013.minigames
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
             }
+
         }
 
         public override int update(KeyboardState kb, MouseState ms)
@@ -80,6 +91,8 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.START:
+                    playedEndSound = false;
+                    MediaPlayer.Play(bgm);
                     gameStatus = -1;
 
                     moneyPos = new Vector2(512.0f, 334.0f);
@@ -133,6 +146,11 @@ namespace HueWGJ2013.minigames
                     break;
                 case State.WIN:
                     stateTimer += speed;
+                    if (!playedEndSound)
+                    {
+                        snd_win.Play();
+                        playedEndSound = true;
+                    }
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
@@ -141,6 +159,11 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.LOSE:
+                    if (!playedEndSound)
+                    {
+                        snd_lose.Play();
+                        playedEndSound = true;
+                    }
                     stateTimer += speed;
                     if (stateTimer >= gameEndTimer)
                     {
@@ -150,6 +173,7 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.EXIT:
+                    MediaPlayer.Stop();
                     return gameStatus;
                 default:
                     break;

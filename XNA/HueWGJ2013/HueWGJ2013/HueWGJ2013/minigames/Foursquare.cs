@@ -27,6 +27,10 @@ namespace HueWGJ2013.minigames
 
         List<Rectangle> zones = new List<Rectangle>();
 
+        SoundEffect snd_win;
+        SoundEffect snd_lose;
+        Song bgm;
+
         Vector2 center = new Vector2(512, 384);
         float scale;
 
