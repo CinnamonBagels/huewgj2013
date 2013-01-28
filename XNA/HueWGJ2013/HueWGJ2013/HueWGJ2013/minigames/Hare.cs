@@ -45,6 +45,11 @@ namespace HueWGJ2013.minigames
         bool attemptingToMate = false;
         int attempts = 0;
 
+        SoundEffect snd_win;
+        SoundEffect snd_lose;
+        Song bgm;
+        bool playedEndSound;
+
         public Hare(ContentManager c)
             : base(c)
         {
@@ -58,6 +63,9 @@ namespace HueWGJ2013.minigames
             img_mate = Content.Load<Texture2D>("minigames/Hare/mate");
             ground = Game1.hueGraphics.getSolidTexture();
             hare = new Animation(img_hare, 1, 3, 5);
+            snd_win = Content.Load<SoundEffect>("minigames/default_win");
+            snd_lose = Content.Load<SoundEffect>("minigames/default_fail");
+            bgm = Content.Load<Song>("minigames/hare/bgm_letme");
         }
 
         public override void draw(SpriteBatch sb)
@@ -193,6 +201,8 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.START:
+                    playedEndSound = false;
+                    MediaPlayer.Play(bgm);
                     gameStatus = -1;
                     alive = true;
                     foot = new Vector2(440.0f, 192.0f);
@@ -271,6 +281,11 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.WIN:
+                    if (!playedEndSound)
+                    {
+                        snd_win.Play();
+                        playedEndSound = true;
+                    }
                     stateTimer += speed;
                     if (stateTimer >= gameEndTimer)
                     {
@@ -280,6 +295,11 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.LOSE:
+                    if (!playedEndSound)
+                    {
+                        snd_lose.Play();
+                        playedEndSound = true;
+                    }
                     stateTimer += speed;
                     if (stateTimer >= gameEndTimer)
                     {
@@ -289,6 +309,7 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.EXIT:
+                    MediaPlayer.Stop();
                     return gameStatus;
                 default:
                     break;
