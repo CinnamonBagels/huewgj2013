@@ -33,9 +33,14 @@ namespace HueWGJ2013.minigames
         Vector2 pos2 = new Vector2(25, 25);
         Vector2 pos3 = new Vector2(250, 25);
 
+        SoundEffect snd_win;
+        SoundEffect snd_lose;
+        Song bgm;
+
         float barDir;
         bool throwing;
         bool hasThrown;
+        bool playedEndSound = false;
 
         public BelAir(ContentManager c)
             : base(c)
@@ -50,6 +55,9 @@ namespace HueWGJ2013.minigames
             img_hoop = Content.Load<Texture2D>("minigames/BelAir/hoop");
             anim_baller = new Animation(img_baller, 1, 7, 10);
             pixel1 = Game1.hueGraphics.getSolidTexture();
+            snd_win = Content.Load<SoundEffect>("minigames/BelAir/slam");
+            snd_lose = Content.Load<SoundEffect>("minigames/default_fail");
+            bgm = Content.Load<Song>("minigames/BelAir/bgm_cmonand");
         }
 
         public override void draw(SpriteBatch sb)
@@ -103,6 +111,8 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.START:
+                    MediaPlayer.Play(bgm);
+                    playedEndSound = false;
                     anim_baller.stopLoop();
                     anim_baller.goToFrame(0);
                     anim_baller.animateThis = false;
@@ -135,6 +145,10 @@ namespace HueWGJ2013.minigames
                     hasThrown = false;
                     barDir = 0;
                     //Ready to go!
+                    state = State.INTRO;
+                    break;
+
+                case State.INTRO:
                     stateTimer += speed;
                     if (stateTimer >= gameIntroTimer)
                     {
@@ -195,6 +209,11 @@ namespace HueWGJ2013.minigames
 
                 case State.WIN:
                     stateTimer += speed;
+                    if (!playedEndSound)
+                    {
+                        snd_win.Play();
+                        playedEndSound = true;
+                    }
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
@@ -203,6 +222,11 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.LOSE:
+                    if (!playedEndSound)
+                    {
+                        snd_lose.Play();
+                        playedEndSound = true;
+                    }
                     stateTimer += speed;
                     if (stateTimer >= gameEndTimer)
                     {
@@ -212,6 +236,7 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.EXIT:
+                    MediaPlayer.Stop();
                     return gameStatus;
                 default:
                     break;
