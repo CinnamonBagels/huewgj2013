@@ -108,7 +108,7 @@ namespace HueWGJ2013.minigames
 
                 case State.INTRO:
                     stateTimer += speed;
-                    if (stateTimer >= gamePlayTimer)
+                    if (stateTimer >= gameIntroTimer)
                     {
                         stateTimer = 0.0f;
                         state = State.PLAY;

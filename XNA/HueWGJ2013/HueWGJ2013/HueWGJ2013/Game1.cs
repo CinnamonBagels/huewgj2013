@@ -61,6 +61,10 @@ namespace HueWGJ2013
             mg["GrowDownThere"] = new GrowDownThere(Content);
             games.Add("Hare");
             mg["Hare"] = new Hare(Content);
+            games.Add("Mare");
+            mg["Mare"] = new Mare(Content);
+            //games.Add("Share");
+            //mg["Share"] = new Share(Content);
 
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;

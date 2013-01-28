@@ -46,7 +46,7 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Trillionaire! (Number keys)");
+                    Game1.hueGraphics.drawInstructionText("Become a trillionaire! (1/0 keys)");
                     sb.DrawString(font, "Intro", pos, Color.Red);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
@@ -90,8 +90,6 @@ namespace HueWGJ2013.minigames
                     state = State.INTRO;
                     break;
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Become a trillionaire! (1/0 keys)");
-
                     stateTimer += speed;
                     if (stateTimer >= gameIntroTimer)
                     {

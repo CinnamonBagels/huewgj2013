@@ -117,23 +117,23 @@ namespace HueWGJ2013
         /// <param name="to"></param>
         public void loopAnimation(Vector2 from, Vector2 to)
         {
-            stopAfterFinish = false;
-            looping = true;
-            loopFrom = currentFrame = (int) (from.Y * columns + to.X);
-            loopTo = currentFrame = (int) (from.Y * columns + to.X);
+            this.stopAfterFinish = false;
+            this.looping = true;
+            this.loopFrom = currentFrame = (int) (from.Y * columns + to.X);
+            this.loopTo = currentFrame = (int) (from.Y * columns + to.X);
         }
 
         public void loopAnimation(int from, int to)
         {
-            stopAfterFinish = false;
-            looping = true;
-            loopFrom = from;
-            loopTo = to;
+            this.stopAfterFinish = false;
+            this.looping = true;
+            this.loopFrom = from;
+            this.loopTo = to;
         }
 
         public void stopLoop()
         {
-            looping = false;
+            this.looping = false;
         }
         /// <summary>
         /// Goes to the indicated frame from the indicated frame and stops the animation after it reaches the last frame.
@@ -142,10 +142,10 @@ namespace HueWGJ2013
         /// <param name="to"></param>
         public void goToAndStop(Vector2 from, Vector2 to)
         {
-            looping = true;
-            stopAfterFinish = true;
-            loopFrom = (int)(from.Y * columns + from.X);
-            loopTo = (int)(to.Y * columns + to.X);
+            this.looping = true;
+            this.stopAfterFinish = true;
+            this.loopFrom = (int)(from.Y * columns + from.X);
+            this.loopTo = (int)(to.Y * columns + to.X);
         }
 
         /// <summary>
@@ -155,10 +155,10 @@ namespace HueWGJ2013
         /// <param name="to"></param>
         public void goToAndStop(int from, int to)
         {
-            stopAfterFinish = true;
-            looping = true;
-            loopFrom = from;
-            loopTo = to;
+            this.stopAfterFinish = true;
+            this.looping = true;
+            this.loopFrom = from;
+            this.loopTo = to;
         }
 
         /// <summary>
@@ -168,18 +168,18 @@ namespace HueWGJ2013
         /// <param name="to"></param>
         public void goToAndStop(int to)
         {
-            stopAfterFinish = true;
-            looping = true;
-            loopFrom = 0;
-            loopTo = to;
+            this.stopAfterFinish = true;
+            this.looping = true;
+            this.loopFrom = 0;
+            this.loopTo = to;
         }
 
         public void goToAndStop(Vector2 to)
         {
-            looping = true;
-            stopAfterFinish = true;
-            loopFrom = 0;
-            loopTo = (int)(to.Y * columns + to.X);
+            this.looping = true;
+            this.stopAfterFinish = true;
+            this.loopFrom = 0;
+            this.loopTo = (int)(to.Y * columns + to.X);
         }
 
         public Rectangle getBoundingBox()
