@@ -28,7 +28,7 @@ namespace HueWGJ2013.minigames
         Vector2 powerWinPos;
         Vector2 powerCurPos;
         Vector2 ballerPos;
-        Vector2 hoopPos = new Vector2(768, 500);
+        Vector2 hoopPos;
 
         Vector2 pos2 = new Vector2(25, 25);
         Vector2 pos3 = new Vector2(250, 25);
@@ -67,6 +67,8 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.START:
+                    break;
+                case State.INTRO:
                     Game1.hueGraphics.drawInstructionText("Prince of Bel-Air!");
                     Game1.hueGraphics.drawInstructionText("\n(Hold space to aim, release to shoot)");
                     anim_baller.draw(sb, ballerPos);
@@ -110,6 +112,7 @@ namespace HueWGJ2013.minigames
             speed = Game1.speed;
             timer += speed;
             anim_baller.update();
+            //ballerPos = new Vector2(hoopPos.X - 4 * (anim_baller.getBoundingBox().Width), hoopPos.Y + img_hoop.Height - anim_baller.getBoundingBox().Height);
 
             switch (state)
             {
@@ -123,25 +126,26 @@ namespace HueWGJ2013.minigames
 
                     Random rand = new Random();
 
-                    hoopPos = new Vector2(768, 500);
-                    powerBgPos = new Vector2(30, 380);
-                    powerWinPos = new Vector2(rand.Next(45) + 45, 380);
-                    powerCurPos = new Vector2(30, 380);
+                    hoopPos = new Vector2(768, 384);
+                    anim_baller.updateRenderLocation(new Vector2(1, 1));
                     ballerPos = new Vector2(hoopPos.X - 4 * (anim_baller.getBoundingBox().Width), hoopPos.Y + img_hoop.Height - anim_baller.getBoundingBox().Height);
+                    powerBgPos = new Vector2(ballerPos.X, ballerPos.Y + img_baller.Height);
+                    powerWinPos = new Vector2(powerBgPos.X + rand.Next(225) + 225, ballerPos.Y + img_baller.Height);
+                    powerCurPos = new Vector2(ballerPos.X, ballerPos.Y + img_baller.Height);
 
                     powerBg = new Rectangle();
-                    powerBg.Width = 100;
-                    powerBg.Height = 20;
+                    powerBg.Width = 500;
+                    powerBg.Height = 40;
                     powerBg.Offset((int)powerBgPos.X, (int)powerBgPos.Y);
 
                     powerWin = new Rectangle();
-                    powerWin.Width = 20;
-                    powerWin.Height = 20;
+                    powerWin.Width = 100;
+                    powerWin.Height = 40;
                     powerWin.Offset((int)powerWinPos.X, (int)powerWinPos.Y);
 
                     powerCur = new Rectangle();
-                    powerCur.Width = 2;
-                    powerCur.Height = 20;
+                    powerCur.Width = 10;
+                    powerCur.Height = 40;
                     powerCur.Offset((int)powerCurPos.X, (int)powerCurPos.Y);
 
                     throwing = false;
@@ -151,7 +155,6 @@ namespace HueWGJ2013.minigames
                     stateTimer = 0.0f;
                     state = State.INTRO;
                     break;
-
                 case State.INTRO:
                     stateTimer += speed;
                     if (stateTimer >= gameIntroTimer)
@@ -172,7 +175,7 @@ namespace HueWGJ2013.minigames
                     {
                         anim_baller.goToFrame(1);
                         throwing = true;
-                        barDir = 1 * speed;
+                        barDir = 1 * (speed * 0.75f) * 250;
                         powerCur.X += (int)Math.Ceiling(barDir);
                     }
                     if (kb.IsKeyDown(Keys.Space) && throwing == true && hasThrown == false)
@@ -181,11 +184,11 @@ namespace HueWGJ2013.minigames
                         if (powerCur.X >= (powerBg.X + powerBg.Width) && barDir > 0)
                         {
                             powerCur.X = powerBg.X + powerBg.Width;
-                            barDir = -1 * speed;
+                            barDir = -1 * speed * 250;
                         }
                         else if (powerCur.X <= powerBg.X && barDir < 0)
                         {
-                            barDir = 1 * speed;
+                            barDir = 1 * speed * 250;
                         }
                         powerCur.X += (int)Math.Ceiling(barDir);
                     }
@@ -241,7 +244,10 @@ namespace HueWGJ2013.minigames
                     break;
                 case State.EXIT:
                     MediaPlayer.Stop();
-                    return gameStatus;
+                    int temp = gameStatus;
+                    gameStatus = -1;
+                    state = State.START;
+                    return temp;
                 default:
                     break;
             }

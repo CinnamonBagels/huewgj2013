@@ -16,10 +16,10 @@ namespace HueWGJ2013.minigames
     {
         Texture2D img_card;
 
-        static int rect1oPosX = 256;
-        static int rect1oPosY = 384;
-        static int rect2oPosX = 768;
-        static int rect2oPosY = 384;
+        static int rect1oPosX = 331 - 91;
+        static int rect1oPosY = 384 - 133;
+        static int rect2oPosX = 662 - 91;
+        static int rect2oPosY = 384 - 133;
 
         Rectangle rect11 = new Rectangle(rect1oPosX, rect1oPosY, 193, 266);
         Rectangle rect12 = new Rectangle(rect1oPosX, rect1oPosY, 193, 266);
@@ -33,6 +33,11 @@ namespace HueWGJ2013.minigames
         List<object> stack1 = new List<object>();
         List<object> stack2 = new List<object>();
 
+        SoundEffect snd_win;
+        SoundEffect snd_lose;
+        Song bgm;
+        bool playedEndSound;
+
         public Fair(ContentManager c)
             : base(c)
         {
@@ -42,33 +47,46 @@ namespace HueWGJ2013.minigames
         public override void load(SpriteFont font)
         {
             img_card = Content.Load<Texture2D>("minigames/Fair/card");
+            snd_win = Content.Load<SoundEffect>("minigames/default_win");
+            snd_lose = Content.Load<SoundEffect>("minigames/default_fail");
+            bgm = Content.Load<Song>("minigames/bgm_default");
             this.font = font;
         }
 
         public override void draw(SpriteBatch sb)
         {
-            sb.DrawString(font, "Make it Fair", pos2, Color.Red);
-            sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
+            //sb.DrawString(font, "Make it Fair", pos2, Color.Red);
+            //sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
 
+            sb.Draw(img_card, rect11, Color.White);
+            sb.Draw(img_card, rect12, Color.White);
+            sb.Draw(img_card, rect13, Color.White);
+            sb.Draw(img_card, rect2, Color.White);
             switch (state)
             {
                 case State.START:
                     break;
                 case State.INTRO:
-                    sb.DrawString(font, "Intro", pos, Color.Red);
+                    //sb.DrawString(font, "Intro", pos, Color.Red);
+                    Game1.hueGraphics.drawInstructionText("Make it fair!");
+                    Game1.hueGraphics.drawInstructionText("\n(Move a card from left to right)");
                     break;
                 case State.PLAY:
-                    sb.Draw(img_card, rect11, Color.White);
-                    sb.Draw(img_card, rect12, Color.White);
-                    sb.Draw(img_card, rect13, Color.White);
-                    sb.Draw(img_card, rect2, Color.White);
-                    sb.DrawString(font, "Playing", pos, Color.Red);
+                    if (stateTimer < 3f)
+                    {
+                        Game1.hueGraphics.drawInstructionText("GO!!!");
+                    }
+                    //sb.DrawString(font, "Playing", pos, Color.Red);
                     break;
                 case State.LOSE:
-                    sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Fail!");
+                    //Game1.hueGraphics.drawInstructionText("Fail!");
+                    //sb.DrawString(font, "LOSE!", pos, Color.Green);
                     break;
                 case State.WIN:
-                    sb.DrawString(font, "WIN!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Win!");
+                    //Game1.hueGraphics.drawInstructionText("Win!");
+                    //sb.DrawString(font, "WIN!", pos, Color.Green);
                     break;
             }
         }
@@ -82,11 +100,14 @@ namespace HueWGJ2013.minigames
             {
                 case State.START:
                     gameStatus = -1;
+                    playedEndSound = false;
+                    MediaPlayer.Play(bgm);
+
                     state = State.INTRO;
                     break;
                 case State.INTRO:
                     stateTimer += speed;
-                    if (stateTimer >= gamePlayTimer)
+                    if (stateTimer >= gameIntroTimer)
                     {
                         stateTimer = 0.0f;
                         state = State.PLAY;
@@ -107,7 +128,7 @@ namespace HueWGJ2013.minigames
                     if (ms.LeftButton == ButtonState.Pressed && rect11.Contains(ms.X, ms.Y) && rect2.Contains(ms.X, ms.Y))
                     {
                         stateTimer = 0.0f;
-                        state = State.WIN;   
+                        state = State.WIN;
                     }
                     break;
                 case State.WIN:
@@ -123,6 +144,11 @@ namespace HueWGJ2013.minigames
                     stack1.Clear();
                     stack2.Clear();
                     stateTimer += speed;
+                    if (!playedEndSound)
+                    {
+                        snd_win.Play();
+                        playedEndSound = true;
+                    }
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
@@ -143,6 +169,11 @@ namespace HueWGJ2013.minigames
                     stateTimer += speed;
                     stack1.Clear();
                     stack2.Clear();
+                    if (!playedEndSound)
+                    {
+                        snd_lose.Play();
+                        playedEndSound = true;
+                    }
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
@@ -151,7 +182,11 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.EXIT:
-                    return gameStatus;
+                    MediaPlayer.Stop();
+                    int temp = gameStatus;
+                    gameStatus = -1;
+                    state = State.START;
+                    return temp;
             }
             return -1;
         }

@@ -21,6 +21,8 @@ namespace HueWGJ2013
         private int loopTo;
         private int animationSpeed;
         private int frameskip;
+        Rectangle destinationRectangle;
+        Rectangle borderRectangle;
 
         public Animation(Texture2D texture, int rows, int columns, int animationSpeed)
         {
@@ -48,6 +50,15 @@ namespace HueWGJ2013
             }
         }
 
+        public void updateRenderLocation(Vector2 location)
+        {
+            int width = Texture.Width / columns;
+            int height = Texture.Height / rows;
+            destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
+            borderRectangle = new Rectangle((int)location.X - 3, (int)location.Y - 3, width + 6, height + 6);
+        }
+
+
         public void draw(SpriteBatch spriteBatch, Vector2 location)
         {
             int width = Texture.Width / columns;
@@ -56,7 +67,8 @@ namespace HueWGJ2013
             int column = currentFrame % columns;
 
             Rectangle sourceRectangle = new Rectangle(width * column, height * row, width, height);
-            Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
+            destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
+            borderRectangle = new Rectangle((int)location.X-3, (int)location.Y-3, width+6, height+6);
 
             spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White);
         }
@@ -75,8 +87,12 @@ namespace HueWGJ2013
                 {
                     currentFrame++;
                     if (currentFrame > loopTo)
+                    {
                         currentFrame = loopTo;
                         animateThis = false;
+                        stopAfterFinish = false;
+                        looping = false;
+                    }
                 }
             }
             else
@@ -187,7 +203,12 @@ namespace HueWGJ2013
             int width = Texture.Width / columns;
             int height = Texture.Height / rows;
 
-            return new Rectangle(0, 0, width, height); 
+            return destinationRectangle; 
+        }
+
+        public Rectangle getBorder()
+        {
+            return borderRectangle;
         }
     }
 }

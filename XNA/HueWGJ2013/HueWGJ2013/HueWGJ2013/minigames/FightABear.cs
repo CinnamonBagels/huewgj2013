@@ -24,7 +24,7 @@ namespace HueWGJ2013.minigames
         private Rectangle collPunch;
         private Rectangle collMan;
 
-        private int bearHP = 10;
+        private int bearHP;
         private int stateReturned = 0;
 
         private Boolean isPunching = false;
@@ -116,7 +116,7 @@ namespace HueWGJ2013.minigames
                     collPunch = new Rectangle(0, 0, imgPunch.Width, imgPunch.Height);
                     state = State.INTRO;
                     stateReturned = -1;
-                    bearHP = 10;
+                    bearHP = 15;
                     waveTimer = 0;
                     break;
 
@@ -146,11 +146,11 @@ namespace HueWGJ2013.minigames
                         //Move right
                         if (kb.IsKeyDown(Keys.Right))
                         {
-                            collMan.X += (int)Math.Ceiling(300 * speed);
+                            collMan.X += (int)Math.Ceiling(300 * (speed * 0.75f));
                         }
                         else if (kb.IsKeyDown(Keys.Left))
                         {
-                            collMan.X -= (int)Math.Ceiling(300 * speed);
+                            collMan.X -= (int)Math.Ceiling(300 * (speed * 0.75f));
                         }
                         if (!isPunching && kb.IsKeyDown(Keys.Space))
                         {
@@ -209,7 +209,10 @@ namespace HueWGJ2013.minigames
 
                 case State.EXIT:
                     MediaPlayer.Stop();
-                    return stateReturned;
+                    int temp = stateReturned;
+                    stateReturned = -1;
+                    state = State.START;
+                    return temp;
                 default:
 
                     break;

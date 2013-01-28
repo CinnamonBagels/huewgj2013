@@ -117,7 +117,10 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.EXIT:
-                    return gameStatus;
+                    int temp = gameStatus;
+                    gameStatus = -1;
+                    state = State.START;
+                    return temp;
                 default:
                     break;
             }

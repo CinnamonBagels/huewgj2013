@@ -134,8 +134,8 @@ namespace HueWGJ2013.minigames
                         {
                             down = !down;
 
-                            scale += 0.1f;
-                            balloonPos = new Vector2(balloonPos.X - (img_balloon.Width*0.1f)/2.0f, balloonPos.Y - (img_balloon.Height*0.1f));
+                            scale += 0.125f;
+                            balloonPos = new Vector2(balloonPos.X - (img_balloon.Width*0.125f)/2.0f, balloonPos.Y - (img_balloon.Height*0.125f));
 
                             if (scale >= 2.75f)
                             {
@@ -176,7 +176,10 @@ namespace HueWGJ2013.minigames
                     break;
                 case State.EXIT:
                     MediaPlayer.Stop();
-                    return gameStatus;
+                    int temp = gameStatus;
+                    gameStatus = -1;
+                    state = State.START;
+                    return temp;
                 default:
                     break;
             }

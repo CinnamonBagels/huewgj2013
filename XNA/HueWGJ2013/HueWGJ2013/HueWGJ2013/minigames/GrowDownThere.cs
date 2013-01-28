@@ -177,7 +177,10 @@ namespace HueWGJ2013.minigames
                     
                 case State.EXIT:
                     MediaPlayer.Stop();
-                    return stateReturn;
+                    int temp = stateReturn;
+                    stateReturn = -1;
+                    state = State.START;
+                    return temp;
                 default:
                     
                     break;

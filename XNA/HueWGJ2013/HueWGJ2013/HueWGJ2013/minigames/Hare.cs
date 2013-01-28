@@ -32,8 +32,8 @@ namespace HueWGJ2013.minigames
         bool alreadyGap = false;
         float winX = 0.0f;
 
-        float gravity = -0.75f - Game1.speed;
-        float yVelocity = 0.0f;
+        float gravity = -0.75f;
+        float yVelocity = 12.5f;
         bool onGround = false;
         Vector2 foot = new Vector2(440.0f, 192.0f);
         bool alive = true;
@@ -78,6 +78,7 @@ namespace HueWGJ2013.minigames
                 case State.INTRO:
                     Game1.hueGraphics.drawInstructionText("Breed a hare!");
                     Game1.hueGraphics.drawInstructionText("\n(Space to jump)");
+                    
                     //sb.DrawString(font, "Intro", pos, Color.Red);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
@@ -111,14 +112,21 @@ namespace HueWGJ2013.minigames
 
             switch (state)
             {
+                case State.INTRO:
+                    offset = 0.0f;
+                    hare.draw(sb, new Vector2((float)(foot.X - 32.0), (float)(foot.Y - img_hare.Height)));
+                    break;
                 case State.WIN:
                     offset = 0.0f;
                     //sb.Draw(img_hare, new Vector2((float)(winX), (float)(foot.Y - img_hare.Height)), Color.White);
                     hare.goToFrame(0);
+                    hare.animateThis = false;
                     hare.draw(sb, new Vector2((float)(winX+12.0), (float)(foot.Y - img_hare.Height - 8.0)));
                     break;
                 default:
                     //sb.Draw(img_hare, new Vector2((float)(foot.X - img_hare.Width / 2.0), (float)(foot.Y - img_hare.Height)), Color.White);
+                    hare.animateThis = true;
+                    hare.update();
                     hare.draw(sb, new Vector2((float)(foot.X - 32.0), (float)(foot.Y - img_hare.Height)));
                     break;
             }
@@ -151,9 +159,10 @@ namespace HueWGJ2013.minigames
             speed = Game1.speed;
             timer += speed;
 
-            hare.update();
-
+            float delta;
             offset += speed * 120.0f;
+            delta = (speed * 120.0f) / 110.0f;
+            gravity = -0.75f * (1.0f + delta);
             if (offset >= 110.0f)
             {
                 offset = 0.0f;
@@ -192,10 +201,15 @@ namespace HueWGJ2013.minigames
             {
                 yVelocity += gravity;
                 foot = new Vector2(foot.X, foot.Y - yVelocity);
-                hare.goToFrame(1);
+                hare.goToAndStop(0);
             }
             else
             {
+                if (state == State.INTRO)
+                {
+                    hare.goToFrame(1);
+                }
+                hare.animateThis = true;
                 yVelocity = 0.0f;
             }
 
@@ -211,7 +225,8 @@ namespace HueWGJ2013.minigames
                     MediaPlayer.Play(bgm);
                     gameStatus = -1;
                     alive = true;
-                    foot = new Vector2(440.0f, 192.0f);
+                    foot = new Vector2(440.0f, 100.0f);
+                    gravity = -0.75f;
 
                     sections.Clear();
                     gaps.Clear();
@@ -254,7 +269,7 @@ namespace HueWGJ2013.minigames
                     {
                         if (onGround && kb.IsKeyDown(Keys.Space))
                         {
-                            yVelocity = 12.5f + 2 * Game1.speed;
+                            yVelocity = 12.5f * (1.0f + delta);
                         }
 
                         if (!alive)
@@ -316,7 +331,10 @@ namespace HueWGJ2013.minigames
                     break;
                 case State.EXIT:
                     MediaPlayer.Stop();
-                    return gameStatus;
+                    int temp = gameStatus;
+                    gameStatus = -1;
+                    state = State.START;
+                    return temp;
                 default:
                     break;
             }

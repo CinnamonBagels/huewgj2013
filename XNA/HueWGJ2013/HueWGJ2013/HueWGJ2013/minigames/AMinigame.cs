@@ -32,8 +32,8 @@ namespace HueWGJ2013.minigames
         protected SpriteFont font;
         protected float timer;                   //Should not exceed gameLength
         protected float stateTimer;              //Timer for current state
-        protected float gameIntroTimer = 5.0f;
-        protected float gamePlayTimer = 15.0f;
+        protected float gameIntroTimer = 10.0f;
+        protected float gamePlayTimer = 20.0f;
         protected float gameEndTimer = 5.0f;
         protected float speed;
         protected int gameStatus = -1;
@@ -51,6 +51,8 @@ namespace HueWGJ2013.minigames
         /// </summary>
         public void init()
         {
+            this.gameStatus = -1;
+            this.stateTimer = 0.0f;
             state = State.START;
         }
         /// <summary>
@@ -71,6 +73,14 @@ namespace HueWGJ2013.minigames
         public float randomGen(Random rand, float range, float offset)
         {
             return ((float)rand.Next((int)range)) - offset;
+        }
+
+        public void kill(KeyboardState kb, MouseState ms)
+        {
+            stateTimer = 0.0f;
+            state = State.EXIT;
+            this.update(kb, ms);
+            this.init();
         }
     }
 }

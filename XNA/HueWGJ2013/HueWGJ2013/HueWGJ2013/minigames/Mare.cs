@@ -122,7 +122,7 @@ namespace HueWGJ2013.minigames
                 case State.START:
                     playedEndSound = false;
                     MediaPlayer.Play(bgm);
-                    MediaPlayer.Volume = .3F;
+                    MediaPlayer.Volume = 1.0F;
                     gameStatus = -1;
                     stateTimer = 0.0f;
                     state = State.INTRO;
@@ -207,7 +207,10 @@ namespace HueWGJ2013.minigames
                 case State.EXIT:
                     MediaPlayer.Stop();
                     MediaPlayer.Volume = 1F;
-                    return gameStatus;
+                    int temp = gameStatus;
+                    gameStatus = -1;
+                    state = State.START;
+                    return temp;
             }
             timer = 0.0f;
             return -1;

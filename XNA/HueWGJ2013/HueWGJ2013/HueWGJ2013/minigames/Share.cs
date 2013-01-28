@@ -35,8 +35,8 @@ namespace HueWGJ2013.minigames
 
         public override void draw(SpriteBatch sb)
         {
-            sb.DrawString(font, "Share", pos2, Color.Red);
-            sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
+            //sb.DrawString(font, "Share", pos2, Color.Red);
+            //sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
             switch (state)
             {
                 case State.START:
@@ -49,21 +49,29 @@ namespace HueWGJ2013.minigames
                     currentLetter = sentence[randomSentence][letterNumber];
                     break;
                 case State.INTRO:
-                    sb.DrawString(font, "Intro", pos, Color.Red);
+                    Game1.hueGraphics.drawInstructionText("Get a share!");
+                    Game1.hueGraphics.drawInstructionText("\n(Type the sentence)");
+                    //sb.DrawString(font, "Intro", pos, Color.Red);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.PLAY:
-                    sb.DrawString(font, "Playing", pos, Color.Red);
+                    if (stateTimer < 3f)
+                    {
+                        Game1.hueGraphics.drawInstructionText("GO!!!");
+                    }
+                    //sb.DrawString(font, "Playing", pos, Color.Red);
                    // sb.DrawString();
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.LOSE:
-                    sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Fail!");
+                    //sb.DrawString(font, "LOSE!", pos, Color.Green);
                   //  sb.DrawString();
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.WIN:
-                    sb.DrawString(font, "WIN!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Win!");
+                    //sb.DrawString(font, "WIN!", pos, Color.Green);
                    // sb.DrawString();
                     //sb.Draw(img_happy, pos, Color.White);
                     break;

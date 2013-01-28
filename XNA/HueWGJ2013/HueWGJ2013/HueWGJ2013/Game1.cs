@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Minigame = HueWGJ2013.minigames.AMinigame;
 using HueWGJ2013.minigames;
+using System.Reflection;
 
 namespace HueWGJ2013
 {
@@ -56,8 +57,9 @@ namespace HueWGJ2013
         int tempVal = 0;
         List<int> playerScore;
         int currentPlayer = 0;
-        int numPlayers = 4;
+        int numPlayers = -1;
         int winner = 0;
+        bool candidate = false;
 
         State state = State.START;
         protected float stateTimer;              //Timer for current state
@@ -69,10 +71,30 @@ namespace HueWGJ2013
         public static float speed = 0.05f;
         public static HueGraphics hueGraphics;
 
+        public static List<Color> predefinedColors = new List<Color>();
+        public bool escDown = false;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "HueWGJ2013Content";
+
+            // Get all of the public static properties
+            System.Reflection.PropertyInfo[] properties = typeof(Color).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+
+            foreach (System.Reflection.PropertyInfo propertyInfo in properties)
+            {
+                // Check to make sure the property has a get method, and returns type "Color"
+                if (propertyInfo.GetGetMethod() != null && propertyInfo.PropertyType == typeof(Color))
+                {
+                    // Get the color returned by the property by invoking it
+                    Color color = (Color)propertyInfo.GetValue(null, null);
+                    predefinedColors.Add(color);
+                }
+            }
+
+            // MANDATORY
+            mg["Menu"] = new Menu(Content);
 
             games.Add("Pear");
             mg["Pear"] = new Pear(Content);
@@ -92,19 +114,15 @@ namespace HueWGJ2013
             mg["FightABear"] = new FightABear(Content);
             games.Add("Mare");
             mg["Mare"] = new Mare(Content);
+            games.Add("Fair");
+            mg["Fair"] = new Fair(Content);
 
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;
+            this.Window.Title = "GrowioWare - Team Hue 2013";
 
             this.IsMouseVisible = true;
             rand = new Random();
-
-            playerScore = new List<int>();
-            for (int i = 0; i < numPlayers; i++)
-            {
-                playerScore.Add(0);
-            }
-
         }
 
         /// <summary>
@@ -170,9 +188,22 @@ namespace HueWGJ2013
             ks = Keyboard.GetState();
             ms = Mouse.GetState();
 
-            if (ks.IsKeyDown(Keys.Escape))
+            if (!escDown && ks.IsKeyDown(Keys.Escape))
             {
-                Exit();
+                if (numPlayers == -1)
+                    Exit();
+                else
+                {
+                    escDown = true;
+                    ((Minigame)mg[curGame]).kill(ks, ms);
+                    currentPlayer = 0;
+                    numPlayers = -1;
+                    state = State.START;
+                }
+            }
+            else if (ks.IsKeyUp(Keys.Escape))
+            {
+                escDown = false;
             }
 
             switch (state)
@@ -182,53 +213,84 @@ namespace HueWGJ2013
 
                     winner = 0;
                     stateTimer = 0.0f;
+                    currentPlayer = 0;
+
                     state = State.PLAY;
                     break;
                 case State.PLAY:
-                    tempVal = ((Minigame)mg[curGame]).update(ks, ms);
-                    if (tempVal >= 0)
+                    if (numPlayers == -1)
                     {
-                        if (tempVal == 1)
-                            playerScore[currentPlayer]++;
+                        tempVal = ((Minigame)mg["Menu"]).update(ks, ms);
 
-                        if (gamesPlayed <= 10)
+                        if (tempVal > 0)
                         {
-                            speed *= 1.025f;
-                            gamesPlayed = 0;
-                        }
+                            numPlayers = tempVal;
+                            stateTimer = 0.0f;
 
-                        currentPlayer++;
-                        if (currentPlayer >= numPlayers)
-                        {
-                            for (int j = 0; j < numPlayers; j++)
+                            playerScore = new List<int>();
+                            for (int i = 0; i < numPlayers; i++)
                             {
-                                if (playerScore[j] >= 5)
-                                {
-                                    for (int i = 0; i < numPlayers; i++)
-                                    {
-                                        if (playerScore[i] >= playerScore[j])
-                                        {
-                                            break;
-                                        }                                        
-                                    }
-                                    winner = j + 1;
-                                    state = State.WIN;
-                                }
+                                playerScore.Add(0);
                             }
-                            currentPlayer = 0;
                         }
-
-                        curGame = newGame();
-                        if (state != State.WIN)
+                    }
+                    else
+                    {
+                        tempVal = ((Minigame)mg[curGame]).update(ks, ms);
+                        if (tempVal >= 0)
                         {
-                            ((Minigame)mg[curGame]).init();
+                            if (tempVal == 1)
+                                playerScore[currentPlayer]++;
+
+                            if (gamesPlayed <= 20)
+                            {
+                                speed *= 1.025f;
+                                gamesPlayed = 0;
+                            }
+
+                            currentPlayer++;
+                            if (currentPlayer >= numPlayers)
+                            {
+                                // choose winner?
+                                for (int j = 0; j < numPlayers; j++)
+                                {
+                                    if (playerScore[j] >= 5)
+                                    {
+                                        candidate = true;
+                                        for (int i = 0; i < numPlayers; i++)
+                                        {
+                                            if (playerScore[j] <= playerScore[i] && j != i)
+                                            {
+                                                candidate = false;
+                                                break;
+                                            }
+                                        }
+                                        if (candidate)
+                                        {
+                                            winner = j + 1;
+                                            stateTimer = 0.0f;
+                                            state = State.WIN;
+                                        }
+                                    }
+                                }
+                                currentPlayer = 0;
+                            }
+
+                            if (state != State.WIN)
+                            {
+                                curGame = newGame();
+                                ((Minigame)mg[curGame]).init();
+                            }
                         }
                     }
                     break;
                 case State.WIN:
                     stateTimer += speed;
-                    if (stateTimer >= gameEndTimer)
+                    currentPlayer = winner - 1;
+                    if (stateTimer >= gameEndTimer * 5.0f)
                     {
+                        numPlayers = -1;
+                        currentPlayer = 0;
                         stateTimer = 0.0f;
                         state = State.START;
                     }
@@ -236,7 +298,6 @@ namespace HueWGJ2013
                 default:
                     break;
             }
-
 
             // TODO: Add your update logic here
 
@@ -251,16 +312,69 @@ namespace HueWGJ2013
         {
             GraphicsDevice.Clear(Color.SkyBlue);
 
-            spriteBatch.Begin();            
-            ((Minigame)mg[curGame]).draw(spriteBatch);
+            spriteBatch.Begin();
 
-            spriteBatch.DrawString(defaultFont, "Current player: " + (currentPlayer + 1),
-                    new Vector2(25.0f, 418.0f), Color.Red);
-            for (int i = 0; i < playerScore.Count; i++)
+            if (numPlayers == -1)
             {
-                spriteBatch.DrawString(defaultFont, "Player " + i + ": "
-                    + playerScore[i], new Vector2(25.0f, 503.0f + i * 25.0f), Color.Red);
+                ((Minigame)mg["Menu"]).draw(spriteBatch);
             }
+            else
+            {
+
+                ((Minigame)mg[curGame]).draw(spriteBatch);
+            }
+
+            if (numPlayers >= 1)
+            {
+                character1.updateRenderLocation(new Vector2(25.0f, 618.0f));
+            }
+            if (numPlayers >= 2)
+            {
+                character2.updateRenderLocation(new Vector2(125.0f, 618.0f));
+            }
+            if (numPlayers >= 3)
+            {
+                character3.updateRenderLocation(new Vector2(225.0f, 618.0f));
+            }
+            if (numPlayers >= 4)
+            {
+                character4.updateRenderLocation(new Vector2(325.0f, 618.0f));
+            }
+
+            switch (currentPlayer)
+            {
+                case 0:
+                    spriteBatch.Draw(hueGraphics.getSolidTexture(), character1.getBorder(), Color.Maroon);
+                    spriteBatch.Draw(hueGraphics.getSolidTexture(), character1.getBoundingBox(), Color.Red);
+                    break;
+                case 1:
+                    spriteBatch.Draw(hueGraphics.getSolidTexture(), character2.getBorder(), Color.MediumVioletRed);
+                    spriteBatch.Draw(hueGraphics.getSolidTexture(), character2.getBoundingBox(), Color.Pink);
+                    break;
+                case 2:
+                    spriteBatch.Draw(hueGraphics.getSolidTexture(), character3.getBorder(), Color.Green);
+                    spriteBatch.Draw(hueGraphics.getSolidTexture(), character3.getBoundingBox(), Color.Lime);
+                    break;
+                case 3:
+                    spriteBatch.Draw(hueGraphics.getSolidTexture(), character4.getBorder(), Color.Brown);
+                    spriteBatch.Draw(hueGraphics.getSolidTexture(), character4.getBoundingBox(), Color.Orange);
+                    break;
+            }
+            // Current Player Display
+            //spriteBatch.DrawString(defaultFont, "Current Player " + currentPlayer, new Vector2(25.0f - 1.0f, 453.0f), Color.White);
+
+            //Score Display
+            //if (numPlayers > 0)
+            //{
+            //    for (int i = 0; i < playerScore.Count; i++)
+            //    {
+            //        spriteBatch.DrawString(defaultFont, "Player " + i + ": " + playerScore[i], new Vector2(25.0f - 1.0f, 503.0f + i * 25.0f), Color.Black);
+            //        spriteBatch.DrawString(defaultFont, "Player " + i + ": " + playerScore[i], new Vector2(25.0f + 1.0f, 503.0f + i * 25.0f), Color.Black);
+            //        spriteBatch.DrawString(defaultFont, "Player " + i + ": " + playerScore[i], new Vector2(25.0f, 503.0f + i * 25.0f - 1.0f), Color.Black);
+            //        spriteBatch.DrawString(defaultFont, "Player " + i + ": " + playerScore[i], new Vector2(25.0f, 503.0f + i * 25.0f + 1.0f), Color.Black);
+            //        spriteBatch.DrawString(defaultFont, "Player " + i + ": " + playerScore[i], new Vector2(25.0f, 503.0f + i * 25.0f), Color.White);
+            //    }
+            //}
 
             if (numPlayers >= 1)
             {
@@ -286,16 +400,8 @@ namespace HueWGJ2013
             switch (state)
             {
                 case State.WIN:
-                    Game1.hueGraphics.drawInstructionText("Player " + winner + " wins!");
+                    Game1.hueGraphics.drawInstructionText((winner==1?"Ferbrache":winner==2?"Gaybrache":winner==3?"Zhukeeper":"Philtato") + " wins!");
                     break;
-            }
-
-            spriteBatch.DrawString(defaultFont, "Current player: " + (currentPlayer + 1),
-                    new Vector2(25.0f, 359.0f), Color.Red);
-            for (int i = 0; i < playerScore.Count; i++)
-            {
-                spriteBatch.DrawString(defaultFont, "Player " + (i + 1) + ": "
-                    + playerScore[i], new Vector2(25.0f, 384.0f + i * 25.0f), Color.Red);
             }
             spriteBatch.End();
             // TODO: Add your drawing code here
