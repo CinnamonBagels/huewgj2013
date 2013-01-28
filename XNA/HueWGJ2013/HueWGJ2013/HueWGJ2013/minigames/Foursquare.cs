@@ -30,6 +30,7 @@ namespace HueWGJ2013.minigames
         SoundEffect snd_win;
         SoundEffect snd_lose;
         Song bgm;
+        bool playedEndSound;
 
         Vector2 center = new Vector2(512, 384);
         float scale;
@@ -51,6 +52,10 @@ namespace HueWGJ2013.minigames
             img_foursquare2 = Content.Load<Texture2D>("minigames/Foursquare/foursquare2");
             img_foursquare3 = Content.Load<Texture2D>("minigames/Foursquare/foursquare3");
             img_foursquare4 = Content.Load<Texture2D>("minigames/Foursquare/foursquare4");
+
+            snd_win = Content.Load<SoundEffect>("minigames/default_win");
+            snd_lose = Content.Load<SoundEffect>("minigames/default_fail");
+            bgm = Content.Load<Song>("minigames/bgm_default");
             //img_sad   = Content.Load<Texture2D>("minigames/Example/sad");
         }
 
@@ -118,6 +123,9 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.START:
+                    playedEndSound = false;
+                    MediaPlayer.Play(bgm);
+
                     panel = 1;
 
                     zones.Add(new Rectangle(435, 449, 46, 46));
@@ -175,6 +183,11 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.WIN:
+                    if (!playedEndSound)
+                    {
+                        snd_win.Play();
+                        playedEndSound = true;
+                    }
                     stateTimer += speed;
                     if (stateTimer >= gameEndTimer)
                     {
@@ -184,6 +197,11 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.LOSE:
+                    if (!playedEndSound)
+                    {
+                        snd_lose.Play();
+                        playedEndSound = true;
+                    }
                     stateTimer += speed;
                     if (stateTimer >= gameEndTimer)
                     {

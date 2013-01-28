@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media; 
+using Microsoft.Xna.Framework.Media;
 using Minigame = HueWGJ2013.minigames.AMinigame;
 using HueWGJ2013.minigames;
 
@@ -18,7 +18,7 @@ namespace HueWGJ2013
     /// This is the main type for your game
     /// </summary>
     /// 
-    
+
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
@@ -46,28 +46,28 @@ namespace HueWGJ2013
         public static HueGraphics hueGraphics;
 
         public Game1()
-        {            
+        {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "HueWGJ2013Content";
 
-            games.Add("Pear");
-            mg["Pear"] = new Pear(Content);
-            games.Add("HotAir");
-            mg["HotAir"] = new HotAir(Content);
-            games.Add("Trillionaire");
-            mg["Trillionaire"] = new Trillionaire(Content);
+            //games.Add("Pear");
+            //mg["Pear"] = new Pear(Content);
+            //games.Add("HotAir");
+            //mg["HotAir"] = new HotAir(Content);
+            //games.Add("Trillionaire");
+            //mg["Trillionaire"] = new Trillionaire(Content);
             games.Add("Foursquare");
             mg["Foursquare"] = new Foursquare(Content);
-            games.Add("BelAir");
-            mg["BelAir"] = new BelAir(Content);
-            games.Add("GrowDownThere");
-            mg["GrowDownThere"] = new GrowDownThere(Content);
-            games.Add("Hare");
-            mg["Hare"] = new Hare(Content);
-            games.Add("FightABear");
-            mg["FightABear"] = new FightABear(Content);
-            games.Add("Mare");
-            mg["Mare"] = new Mare(Content);
+            //games.Add("BelAir");
+            //mg["BelAir"] = new BelAir(Content);
+            //games.Add("GrowDownThere");
+            //mg["GrowDownThere"] = new GrowDownThere(Content);
+            //games.Add("Hare");
+            //mg["Hare"] = new Hare(Content);
+            //games.Add("FightABear");
+            //mg["FightABear"] = new FightABear(Content);
+            //games.Add("Mare");
+            //mg["Mare"] = new Mare(Content);
 
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;
@@ -105,14 +105,14 @@ namespace HueWGJ2013
             spriteBatch = new SpriteBatch(GraphicsDevice);
             defaultFont = Content.Load<SpriteFont>("defaultFont");
             instructionFont = Content.Load<SpriteFont>("instructionFont");
-            hueGraphics = new HueGraphics(GraphicsDevice,instructionFont,spriteBatch);
+            hueGraphics = new HueGraphics(GraphicsDevice, instructionFont, spriteBatch);
             foreach (DictionaryEntry minigame in mg)
             {
                 ((Minigame)minigame.Value).load(defaultFont);
             }
             // Create a new SpriteBatch, which can be used to draw textures.
-            
-            
+
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -141,12 +141,12 @@ namespace HueWGJ2013
                 Exit();
             }
 
-            tempVal = ((Minigame) mg[curGame]).update(ks, ms);
+            tempVal = ((Minigame)mg[curGame]).update(ks, ms);
             if (tempVal >= 0)
             {
                 if (tempVal == 1)
                     playerScore[currentPlayer]++;
-                
+
                 if (gamesPlayed <= 10)
                 {
                     speed *= 1.025f;
@@ -172,9 +172,9 @@ namespace HueWGJ2013
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.SkyBlue);
-            
+
             spriteBatch.Begin();
-            spriteBatch.DrawString(defaultFont, "Current player: " + (currentPlayer + 1), 
+            spriteBatch.DrawString(defaultFont, "Current player: " + (currentPlayer + 1),
                     new Vector2(25.0f, 359.0f), Color.Red);
             for (int i = 0; i < playerScore.Count; i++)
             {
@@ -193,7 +193,7 @@ namespace HueWGJ2013
             curGameNum++;
             if (curGameNum >= games.Count)
             {
-                for (int i = 0; i < games.Count; i++ )
+                for (int i = 0; i < games.Count; i++)
                 {
                     tempVal = rand.Next(games.Count);
                     temp = games[tempVal];
