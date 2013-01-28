@@ -63,6 +63,8 @@ namespace HueWGJ2013
             mg["GrowDownThere"] = new GrowDownThere(Content);
             games.Add("Hare");
             mg["Hare"] = new Hare(Content);
+            games.Add("FightABear");
+            mg["FightABear"] = new FightABear(Content);
             games.Add("Mare");
             mg["Mare"] = new Mare(Content);
 
@@ -168,7 +170,7 @@ namespace HueWGJ2013
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Color.SkyBlue);
             
             spriteBatch.Begin();
             spriteBatch.DrawString(defaultFont, "Current player: " + (currentPlayer + 1), 

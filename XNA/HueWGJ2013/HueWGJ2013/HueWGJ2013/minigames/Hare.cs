@@ -16,6 +16,7 @@ namespace HueWGJ2013.minigames
         MouseState mstate;
 
         Texture2D img_hare;
+        Animation hare;
         Texture2D ground;
         Texture2D img_mate;
 
@@ -30,7 +31,7 @@ namespace HueWGJ2013.minigames
         bool alreadyGap = false;
         float winX = 0.0f;
 
-        float gravity = -0.5f;
+        float gravity = -0.5f - Game1.speed;
         float yVelocity = 0.0f;
         bool onGround = false;
         Vector2 foot = new Vector2(440.0f, 192.0f);
@@ -56,6 +57,7 @@ namespace HueWGJ2013.minigames
             img_hare = Content.Load<Texture2D>("minigames/Hare/hare");
             img_mate = Content.Load<Texture2D>("minigames/Hare/mate");
             ground = Game1.hueGraphics.getSolidTexture();
+            hare = new Animation(img_hare, 1, 3, 5);
         }
 
         public override void draw(SpriteBatch sb)
@@ -91,15 +93,19 @@ namespace HueWGJ2013.minigames
             {
                 gapString = gapString + gap + " ";
             }
-            sb.DrawString(font, alive + " Hare @ attempting to mate? " +attemptingToMate + " attempts: " + attempts, pos2, Color.Red);
+            sb.DrawString(font, alive + " Hare @ ", pos2, Color.Red);
 
-            switch(state){
+            switch (state)
+            {
                 case State.WIN:
-                    winX -= speed * 120.0f;
-                    sb.Draw(img_hare, new Vector2((float)(winX), (float)(foot.Y - img_hare.Height)), Color.White);
+                    offset = 0.0f;
+                    //sb.Draw(img_hare, new Vector2((float)(winX), (float)(foot.Y - img_hare.Height)), Color.White);
+                    hare.goToFrame(2);
+                    hare.draw(sb, new Vector2((float)(winX+12.0), (float)(foot.Y - img_hare.Height - 16.0)));
                     break;
                 default:
-                    sb.Draw(img_hare, new Vector2((float)(foot.X - img_hare.Width / 2.0), (float)(foot.Y - img_hare.Height)), Color.White);
+                    //sb.Draw(img_hare, new Vector2((float)(foot.X - img_hare.Width / 2.0), (float)(foot.Y - img_hare.Height)), Color.White);
+                    hare.draw(sb, new Vector2((float)(foot.X - 32.0), (float)(foot.Y - img_hare.Height)));
                     break;
             }
 
@@ -131,6 +137,8 @@ namespace HueWGJ2013.minigames
             speed = Game1.speed;
             timer += speed;
 
+            hare.update();
+
             offset += speed * 120.0f;
             if (offset >= 110.0f)
             {
@@ -141,9 +149,13 @@ namespace HueWGJ2013.minigames
 
             //ground collision
 
+            bool left = false;
+            bool right = false;
             foreach (Rectangle section in sections)
             {
-                if (alive && yVelocity <= 0.0f && section.Contains(new Point((int)foot.X, (int)foot.Y)))
+                left = section.Contains(new Point((int)(foot.X), (int)(foot.Y + 1.0)));
+                right = section.Contains(new Point((int)(foot.X), (int)(foot.Y + 1.0)));                
+                if (alive && yVelocity <= 0.0f && (left || right))
                 {
                     onGround = true;
                     foot = new Vector2(foot.X, section.Y);
@@ -157,7 +169,7 @@ namespace HueWGJ2013.minigames
 
                 else if (!alive && section.Contains(new Point((int)foot.X, (int)foot.Y)))
                 {
-                    foot = new Vector2((float)(section.X - img_hare.Width / 2.0), foot.Y);
+                    foot = new Vector2((float)(section.X - 16.0), foot.Y);
                     break;
                 }
             }
@@ -166,6 +178,7 @@ namespace HueWGJ2013.minigames
             {
                 yVelocity += gravity;
                 foot = new Vector2(foot.X, foot.Y - yVelocity);
+                hare.goToFrame(1);
             }
             else
             {
@@ -189,6 +202,7 @@ namespace HueWGJ2013.minigames
                     mates.Clear();
                     mateRectangles.Clear();
                     attempts = 0;
+                    currentGaps = 0;
 
                     Random rand = new Random();
                     for (int i = 0; i < maxSections; i++)
@@ -224,7 +238,7 @@ namespace HueWGJ2013.minigames
                     {
                         if (onGround && kb.IsKeyDown(Keys.Space))
                         {
-                            yVelocity = 10.0f;
+                            yVelocity = 10.0f + 2 * Game1.speed;
                         }
 
                         if (!alive)
