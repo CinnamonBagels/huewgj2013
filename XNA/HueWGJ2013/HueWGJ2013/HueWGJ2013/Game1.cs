@@ -178,7 +178,7 @@ namespace HueWGJ2013
                     new Vector2(25.0f, 359.0f), Color.Red);
             for (int i = 0; i < playerScore.Count; i++)
             {
-                spriteBatch.DrawString(defaultFont, "Player " + i + ": "
+                spriteBatch.DrawString(defaultFont, "Player " + (i+1) + ": "
                     + playerScore[i], new Vector2(25.0f, 384.0f + i * 25.0f), Color.Red);
             }
             ((Minigame)mg[curGame]).draw(spriteBatch);
