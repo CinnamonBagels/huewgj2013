@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media; 
+using Microsoft.Xna.Framework.Media;
 using Minigame = HueWGJ2013.minigames.AMinigame;
 using HueWGJ2013.minigames;
 
@@ -18,13 +18,30 @@ namespace HueWGJ2013
     /// This is the main type for your game
     /// </summary>
     /// 
-    
+
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        public enum State
+        {
+            PLAY,
+            WIN,
+            LOSE,
+            INTRO,
+            PAUSE,
+            START,
+            EXIT
+        }
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         KeyboardState ks;
         MouseState ms;
+
+        Texture2D characters;
+        Animation character1;
+        Animation character2;
+        Animation character3;
+        Animation character4;
 
         SpriteFont defaultFont;
         SpriteFont instructionFont;
@@ -39,14 +56,21 @@ namespace HueWGJ2013
         int tempVal = 0;
         List<int> playerScore;
         int currentPlayer = 0;
-        int numPlayers = 5;
+        int numPlayers = 4;
+        int winner = 0;
+
+        State state = State.START;
+        protected float stateTimer;              //Timer for current state
+        protected float gameIntroTimer = 5.0f;
+        protected float gamePlayTimer = 15.0f;
+        protected float gameEndTimer = 5.0f;
 
         public static float timer = 0.0f;
         public static float speed = 0.05f;
         public static HueGraphics hueGraphics;
 
         public Game1()
-        {            
+        {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "HueWGJ2013Content";
 
@@ -92,6 +116,11 @@ namespace HueWGJ2013
         protected override void Initialize()
         {
             base.Initialize();
+            for (int i = 0; i < numPlayers; i++)
+            {
+                playerScore[i] = 0;
+            }
+            speed = 0.05f;
             curGameNum = games.Count;
             curGame = newGame();
         }
@@ -105,15 +134,20 @@ namespace HueWGJ2013
             spriteBatch = new SpriteBatch(GraphicsDevice);
             defaultFont = Content.Load<SpriteFont>("defaultFont");
             instructionFont = Content.Load<SpriteFont>("instructionFont");
-            hueGraphics = new HueGraphics(GraphicsDevice,instructionFont,spriteBatch);
+            hueGraphics = new HueGraphics(GraphicsDevice, instructionFont, spriteBatch);
             foreach (DictionaryEntry minigame in mg)
             {
                 ((Minigame)minigame.Value).load(defaultFont);
             }
             // Create a new SpriteBatch, which can be used to draw textures.
-            
-            
+
+
             // TODO: use this.Content to load your game content here
+            characters = Content.Load<Texture2D>("characters");
+            character1 = new Animation(characters, 1, 4, 1);
+            character2 = new Animation(characters, 1, 4, 1);
+            character3 = new Animation(characters, 1, 4, 1);
+            character4 = new Animation(characters, 1, 4, 1);
         }
 
         /// <summary>
@@ -141,25 +175,69 @@ namespace HueWGJ2013
                 Exit();
             }
 
-            tempVal = ((Minigame) mg[curGame]).update(ks, ms);
-            if (tempVal >= 0)
+            switch (state)
             {
-                if (tempVal == 1)
-                    playerScore[currentPlayer]++;
-                
-                if (gamesPlayed <= 10)
-                {
-                    speed *= 1.025f;
-                    gamesPlayed = 0;
-                }
+                case State.START:
+                    Initialize();
 
-                currentPlayer++;
-                if (currentPlayer >= numPlayers)
-                    currentPlayer = 0;
+                    winner = 0;
+                    stateTimer = 0.0f;
+                    state = State.PLAY;
+                    break;
+                case State.PLAY:
+                    tempVal = ((Minigame)mg[curGame]).update(ks, ms);
+                    if (tempVal >= 0)
+                    {
+                        if (tempVal == 1)
+                            playerScore[currentPlayer]++;
 
-                curGame = newGame();
-                ((Minigame)mg[curGame]).init();
+                        if (gamesPlayed <= 10)
+                        {
+                            speed *= 1.025f;
+                            gamesPlayed = 0;
+                        }
+
+                        currentPlayer++;
+                        if (currentPlayer >= numPlayers)
+                        {
+                            for (int j = 0; j < numPlayers; j++)
+                            {
+                                if (playerScore[j] >= 5)
+                                {
+                                    for (int i = 0; i < numPlayers; i++)
+                                    {
+                                        if (playerScore[i] >= playerScore[j])
+                                        {
+                                            break;
+                                        }                                        
+                                    }
+                                    winner = j + 1;
+                                    state = State.WIN;
+                                }
+                            }
+                            currentPlayer = 0;
+                        }
+
+                        curGame = newGame();
+                        if (state != State.WIN)
+                        {
+                            ((Minigame)mg[curGame]).init();
+                        }
+                    }
+                    break;
+                case State.WIN:
+                    stateTimer += speed;
+                    if (stateTimer >= gameEndTimer)
+                    {
+                        stateTimer = 0.0f;
+                        state = State.START;
+                    }
+                    break;
+                default:
+                    break;
             }
+
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -172,16 +250,46 @@ namespace HueWGJ2013
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.SkyBlue);
-            
+
             spriteBatch.Begin();
-            spriteBatch.DrawString(defaultFont, "Current player: " + (currentPlayer + 1), 
-                    new Vector2(25.0f, 359.0f), Color.Red);
+            
+            ((Minigame)mg[curGame]).draw(spriteBatch);
+
+            spriteBatch.DrawString(defaultFont, "Current player: " + (currentPlayer + 1),
+                    new Vector2(25.0f, 418.0f), Color.Red);
             for (int i = 0; i < playerScore.Count; i++)
             {
                 spriteBatch.DrawString(defaultFont, "Player " + i + ": "
-                    + playerScore[i], new Vector2(25.0f, 384.0f + i * 25.0f), Color.Red);
+                    + playerScore[i], new Vector2(25.0f, 503.0f + i * 25.0f), Color.Red);
             }
-            ((Minigame)mg[curGame]).draw(spriteBatch);
+
+            if (numPlayers >= 1)
+            {
+                character1.goToFrame(0);
+                character1.draw(spriteBatch, new Vector2(25.0f, 618.0f));
+            }
+            if (numPlayers >= 2)
+            {
+                character2.goToFrame(1);
+                character2.draw(spriteBatch, new Vector2(125.0f, 618.0f));
+            }
+            if (numPlayers >= 3)
+            {
+                character3.goToFrame(2);
+                character3.draw(spriteBatch, new Vector2(225.0f, 618.0f));
+            }
+            if (numPlayers >= 4)
+            {
+                character4.goToFrame(3);
+                character4.draw(spriteBatch, new Vector2(325.0f, 618.0f));
+            }
+
+            switch (state)
+            {
+                case State.WIN:
+                    Game1.hueGraphics.drawInstructionText("Player " + winner + " wins!");
+                    break;
+            }
             spriteBatch.End();
             // TODO: Add your drawing code here
 
@@ -193,7 +301,7 @@ namespace HueWGJ2013
             curGameNum++;
             if (curGameNum >= games.Count)
             {
-                for (int i = 0; i < games.Count; i++ )
+                for (int i = 0; i < games.Count; i++)
                 {
                     tempVal = rand.Next(games.Count);
                     temp = games[tempVal];

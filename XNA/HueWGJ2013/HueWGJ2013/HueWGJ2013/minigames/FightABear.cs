@@ -42,23 +42,22 @@ namespace HueWGJ2013.minigames
         {
             this.font = font;
             imgBear = Content.Load<Texture2D>("minigames/FightABear/laserbear");
-            imgMan = Content.Load<Texture2D>("minigames/FightABear/overlymanlyman");
+            imgMan = Content.Load<Texture2D>("minigames/FightABear/BarkLee");
             ground = Game1.hueGraphics.getSolidTexture();
-            imgPunch = Content.Load<Texture2D>("minigames/FightABear/falconpunch");
+            imgPunch = Content.Load<Texture2D>("minigames/FightABear/pawnch");
         }
 
         public override void draw(SpriteBatch sb)
         {
             Vector2 pos = new Vector2(50, 50);
-            sb.DrawString(font, "FightABear", new Vector2(25, 25), Color.Red);
-            sb.DrawString(font, "" + stateTimer, new Vector2(250, 25), Color.Red);
+            //sb.DrawString(font, "FightABear", new Vector2(25, 25), Color.Red);
+            //sb.DrawString(font, "" + stateTimer, new Vector2(250, 25), Color.Red);
             switch (state)
             {
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Fight the bear! (Arrow keys to move, space to punch.)");
-                    sb.DrawString(font, "Intro", pos, Color.Red);
-                    
-                    
+                    Game1.hueGraphics.drawInstructionText("Fight the bear!");
+                    Game1.hueGraphics.drawInstructionText("\n(Left/right to move, space to punch)");
+                    //sb.DrawString(font, "Intro", pos, Color.Red);
                     sb.Draw(imgMan, collMan, Color.White);
                     sb.Draw(imgBear, collBear, Color.White);
                     break;
@@ -67,7 +66,7 @@ namespace HueWGJ2013.minigames
                     {
                         Game1.hueGraphics.drawInstructionText("GO!!!");
                     }
-                    sb.DrawString(font, "Playing", pos, Color.Red);
+                    //sb.DrawString(font, "Playing", pos, Color.Red);
                     
                     sb.Draw(imgBear, collBear, Color.White);
                     sb.Draw(imgMan, collMan, Color.White);
@@ -81,12 +80,14 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.LOSE:
-                    sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    //sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Fail!");
                     sb.Draw(imgMan, collMan, Color.White);
                     sb.Draw(imgBear, collBear, Color.White);
                     break;
                 case State.WIN:
-                    sb.DrawString(font, "WIN!", pos, Color.Green);
+                    //sb.DrawString(font, "WIN!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Win!");
                     sb.Draw(imgMan, collMan, Color.White);
                     break;
             }
@@ -145,7 +146,7 @@ namespace HueWGJ2013.minigames
                         {
                             isPunching = true;
                             collPunch.X = collMan.X + 90 - imgPunch.Width;
-                            collPunch.Y = collMan.Y + 130;
+                            collPunch.Y = collMan.Y + 150;
 
                             if (Rectangle.Intersect(collPunch, collBear).Height > 0
                             && Rectangle.Intersect(collPunch, collBear).Width > 0)
