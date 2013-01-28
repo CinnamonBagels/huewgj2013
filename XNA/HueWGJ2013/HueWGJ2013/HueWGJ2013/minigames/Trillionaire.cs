@@ -46,7 +46,7 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Become a trillionaire! (0/1 keys)");
+                    Game1.hueGraphics.drawInstructionText("Become a trillionaire! (1/0 keys)");
                     sb.DrawString(font, "Intro", pos, Color.Red);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;

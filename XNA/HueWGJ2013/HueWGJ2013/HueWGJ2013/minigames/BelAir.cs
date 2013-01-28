@@ -13,9 +13,11 @@ using HueWGJ2013;
 
 namespace HueWGJ2013.minigames
 {
-    class BelAir:AMinigame
+    class BelAir : AMinigame
     {
         Texture2D img_baller;
+        Animation anim_baller;
+        Texture2D img_hoop;
         Texture2D pixel1;
 
         Rectangle powerBg;
@@ -26,7 +28,8 @@ namespace HueWGJ2013.minigames
         Vector2 powerWinPos;
         Vector2 powerCurPos;
         Vector2 ballerPos;
-        
+        Vector2 hoopPos;
+
         Vector2 pos2 = new Vector2(25, 25);
         Vector2 pos3 = new Vector2(250, 25);
 
@@ -42,9 +45,11 @@ namespace HueWGJ2013.minigames
 
         public override void load(SpriteFont font)
         {
-            this.font  = font;
+            this.font = font;
             img_baller = Content.Load<Texture2D>("minigames/BelAir/baller");
-            pixel1     = Game1.hueGraphics.getSolidTexture();
+            img_hoop = Content.Load<Texture2D>("minigames/BelAir/hoop");
+            anim_baller = new Animation(img_baller, 1, 7, 10);
+            pixel1 = Game1.hueGraphics.getSolidTexture();
         }
 
         public override void draw(SpriteBatch sb)
@@ -54,28 +59,36 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.START:
-                    Game1.hueGraphics.drawInstructionText("Prince of Bel-Air! (Hold/Release Space)");
-                    sb.Draw(img_baller, ballerPos, Color.White);
-                    sb.Draw(pixel1, powerBg, Color.Red);
-                    sb.Draw(pixel1, powerWin, Color.Green);
-                    sb.Draw(pixel1, powerCur, Color.Black);
+                    Game1.hueGraphics.drawInstructionText("Prince of Bel-Air! (Space)");
+                    anim_baller.draw(sb, ballerPos);
+                    //sb.Draw(img_baller, ballerPos, Color.White);
+                    //sb.Draw(pixel1, powerBg, Color.Red);
+                    //sb.Draw(pixel1, powerWin, Color.Green);
+                    //sb.Draw(pixel1, powerCur, Color.Black);
+                    sb.Draw(img_hoop, hoopPos, Color.White);
                     break;
                 case State.PLAY:
                     if (stateTimer < 3f)
                     {
                         Game1.hueGraphics.drawInstructionText("GO!!!");
                     }
-                    sb.Draw(img_baller, ballerPos, Color.White);
+                    anim_baller.draw(sb, ballerPos);
+                    //sb.Draw(img_baller, ballerPos, Color.White);
                     sb.Draw(pixel1, powerBg, Color.Red);
                     sb.Draw(pixel1, powerWin, Color.Green);
                     sb.Draw(pixel1, powerCur, Color.Black);
+                    sb.Draw(img_hoop, hoopPos, Color.White);
                     break;
                 case State.WIN:
-                    sb.Draw(img_baller, ballerPos, Color.White);
+                    anim_baller.draw(sb, ballerPos);
+                    //sb.Draw(img_baller, ballerPos, Color.White);
+                    sb.Draw(img_hoop, hoopPos, Color.White);
                     sb.DrawString(font, "WIN!", ballerPos, Color.Green);
                     break;
                 case State.LOSE:
-                    sb.Draw(img_baller, ballerPos, Color.White);
+                    anim_baller.draw(sb, ballerPos);
+                    //sb.Draw(img_baller, ballerPos, Color.White);
+                    sb.Draw(img_hoop, hoopPos, Color.White);
                     sb.DrawString(font, "LOSE!", ballerPos, Color.Green);
                     break;
             }
@@ -85,18 +98,23 @@ namespace HueWGJ2013.minigames
         {
             speed = Game1.speed;
             timer += speed;
+            anim_baller.update();
 
-            switch(state)
+            switch (state)
             {
                 case State.START:
+                    anim_baller.stopLoop();
+                    anim_baller.goToFrame(0);
+                    anim_baller.animateThis = false;
                     gameStatus = -1;
 
                     Random rand = new Random();
 
-                    powerBgPos = new Vector2(30,380);
-                    powerWinPos = new Vector2(rand.Next(45) + 45,380);
-                    powerCurPos = new Vector2(30,380);
-                    ballerPos = new Vector2(30, 400);
+                    hoopPos = new Vector2(768, 500);
+                    powerBgPos = new Vector2(30, 380);
+                    powerWinPos = new Vector2(rand.Next(45) + 45, 380);
+                    powerCurPos = new Vector2(30, 380);
+                    ballerPos = new Vector2(hoopPos.X - 4 * (anim_baller.getBoundingBox().Width), hoopPos.Y + img_hoop.Height - anim_baller.getBoundingBox().Height);
 
                     powerBg = new Rectangle();
                     powerBg.Width = 100;
@@ -134,18 +152,20 @@ namespace HueWGJ2013.minigames
                     }
                     if (kb.IsKeyDown(Keys.Space) && throwing == false && hasThrown == false)
                     {
+                        anim_baller.goToFrame(1);
                         throwing = true;
-                        barDir = 1* speed;
-                        powerCur.X += (int) Math.Ceiling(barDir);
+                        barDir = 1 * speed;
+                        powerCur.X += (int)Math.Ceiling(barDir);
                     }
                     if (kb.IsKeyDown(Keys.Space) && throwing == true && hasThrown == false)
                     {
+                        anim_baller.goToFrame(1);
                         if (powerCur.X >= (powerBg.X + powerBg.Width) && barDir > 0)
                         {
                             powerCur.X = powerBg.X + powerBg.Width;
                             barDir = -1 * speed;
                         }
-                        else if(powerCur.X <= powerBg.X && barDir < 0)
+                        else if (powerCur.X <= powerBg.X && barDir < 0)
                         {
                             barDir = 1 * speed;
                         }
@@ -154,13 +174,19 @@ namespace HueWGJ2013.minigames
                     if (!kb.IsKeyDown(Keys.Space) && throwing == true && hasThrown == false)
                     {
                         hasThrown = true;
-                        if( (powerCur.X >= powerWin.X) && (powerCur.X <= (powerWin.X + powerWin.Width) ) )
+                        if ((powerCur.X >= powerWin.X) && (powerCur.X <= (powerWin.X + powerWin.Width)))
                         {
+                            anim_baller.animateThis = true;
+                            anim_baller.goToFrame(5);
+                            anim_baller.loopAnimation(5, 6);
+                            ballerPos = new Vector2(hoopPos.X - 75, hoopPos.Y - 35);
                             stateTimer = 0.0f;
                             state = State.WIN;
                         }
                         else
                         {
+                            anim_baller.goToFrame(4);
+                            ballerPos = new Vector2(hoopPos.X - 75, hoopPos.Y - 35);
                             stateTimer = 0.0f;
                             state = State.LOSE;
                         }
