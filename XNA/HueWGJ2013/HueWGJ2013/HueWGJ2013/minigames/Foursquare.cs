@@ -59,7 +59,7 @@ namespace HueWGJ2013.minigames
             scale = 768.0f / (float)img_foursquare1.Height;
             Vector2 tempCenter = new Vector2((float)(center.X - img_foursquare1.Width*scale/2.0), (float)(center.Y - img_foursquare1.Height*scale/2.0));            
 
-            sb.DrawString(font, "" + stateTimer, new Vector2(pos3.X - 100.0f, pos3.Y + 100.0f), Color.Red);
+            //sb.DrawString(font, "" + stateTimer, new Vector2(pos3.X - 100.0f, pos3.Y + 100.0f), Color.Red);
 
             switch (panel)
             {
@@ -79,13 +79,14 @@ namespace HueWGJ2013.minigames
                     break;
             }
 
-            sb.DrawString(font, "Foursqare " + panel + "  @  " + mstate.ToString(), pos2, Color.Red);
+            //sb.DrawString(font, "Foursqare " + panel + "  @  " + mstate.ToString(), pos2, Color.Red);
 
             switch (state)
             {
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Check-in Foursquare! (Left Mouse Button)");
-                    sb.DrawString(font, "Intro", pos, Color.Red);
+                    Game1.hueGraphics.drawInstructionText("Check-in Foursquare!");
+                    Game1.hueGraphics.drawInstructionText("\n(Click to tap screen)");
+                    //sb.DrawString(font, "Intro", pos, Color.Red);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.PLAY:
@@ -93,15 +94,17 @@ namespace HueWGJ2013.minigames
                     {
                         Game1.hueGraphics.drawInstructionText("GO!!!");
                     }
-                    sb.DrawString(font, "Playing", pos, Color.Red);
+                    //sb.DrawString(font, "Playing", pos, Color.Red);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.LOSE:
-                    sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    //sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Fail!");
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.WIN:
-                    sb.DrawString(font, "WIN!", pos, Color.Green);
+                    //sb.DrawString(font, "WIN!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Win!");
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
             }

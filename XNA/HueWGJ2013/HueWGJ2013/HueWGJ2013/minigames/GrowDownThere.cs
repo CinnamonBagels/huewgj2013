@@ -46,13 +46,14 @@ namespace HueWGJ2013.minigames
 
         public override void draw(SpriteBatch sb)
         {
-            sb.DrawString(font, "GrowDownThere", pos2, Color.Red);
-            sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
+            //sb.DrawString(font, "GrowDownThere", pos2, Color.Red);
+            //sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
             switch (state)
             {
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Grow down there! (Right Arrow)");
-                    sb.DrawString(font, "Intro", pos, Color.Red);
+                    Game1.hueGraphics.drawInstructionText("Grow down there!");
+                    Game1.hueGraphics.drawInstructionText("\n(Right Arrow to approach)");
+                    //sb.DrawString(font, "Intro", pos, Color.Red);
                     sb.Draw(img_guy, guyColl, Color.White);
                     anim_lady.draw(sb, ladyInitalPos);
                     break;
@@ -61,17 +62,19 @@ namespace HueWGJ2013.minigames
                     {
                         Game1.hueGraphics.drawInstructionText("GO!!!");
                     }
-                    sb.DrawString(font, "Playing", pos, Color.Red);
+                    //sb.DrawString(font, "Playing", pos, Color.Red);
                     sb.Draw(img_guy, guyColl, Color.White);
                     anim_lady.draw(sb, ladyInitalPos);
                     break;
                 case State.LOSE:
-                    sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    //sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Fail!");
                     sb.Draw(img_guy, guyColl, Color.White);
                     anim_lady.draw(sb, ladyInitalPos);
                     break;
                 case State.WIN:
-                    sb.DrawString(font, "WIN!", pos, Color.Green);
+                    //sb.DrawString(font, "WIN!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Win!");
                     sb.Draw(img_guy, guyColl, Color.White);
                     anim_lady.draw(sb, ladyInitalPos);
                     break;

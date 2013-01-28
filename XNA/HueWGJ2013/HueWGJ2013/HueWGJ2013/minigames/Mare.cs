@@ -57,8 +57,8 @@ namespace HueWGJ2013.minigames
             sb.Draw(img_horsehead, headRectangle, Color.White);
             //sb.Draw(img_carrot, carrotRectangle, Color.White);
 
-            sb.DrawString(font, "Raise a Mare", pos2, Color.Red);
-            sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
+            //sb.DrawString(font, "Raise a Mare", pos2, Color.Red);
+            //sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
 
             switch (state)
             {
@@ -77,23 +77,26 @@ namespace HueWGJ2013.minigames
 
                     break;
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Raise a mare! (Click & Drag)");
-                    sb.DrawString(font, "Intro", pos, Color.Red);
+                    Game1.hueGraphics.drawInstructionText("Raise a mare!");
+                    Game1.hueGraphics.drawInstructionText("\n(Click & drag to feed)");
+                    //sb.DrawString(font, "Intro", pos, Color.Red);
                     break;
                 case State.PLAY:
                     if (stateTimer < 3f)
                     {
                         Game1.hueGraphics.drawInstructionText("GO!!!");
                     }
-                    sb.DrawString(font, "Playing", pos, Color.Red);
+                    //sb.DrawString(font, "Playing", pos, Color.Red);
                     
                     sb.Draw(img_carrot, carrotRectangle, Color.White);
                     break;
                 case State.LOSE:
-                    sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    //sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Fail!");
                     break;
                 case State.WIN:
-                    sb.DrawString(font, "WIN!", pos, Color.Green);
+                    //sb.DrawString(font, "WIN!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Win!");
                     break;
             }
         }

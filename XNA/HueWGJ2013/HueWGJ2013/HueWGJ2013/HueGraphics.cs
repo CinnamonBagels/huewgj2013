@@ -40,7 +40,11 @@ namespace HueWGJ2013.minigames
             Vector2 textSize = instructionFont.MeasureString(s);
             Vector2 textCenter = new Vector2(gd.Viewport.Width / 2, 50f);
             Vector2 pos = new Vector2((float) (textCenter.X - (textSize.X / 2)), (float) 80);
-            spriteBatch.DrawString(instructionFont, s, pos, Color.Red);
+            spriteBatch.DrawString(instructionFont, s, new Vector2((float)(textCenter.X - (textSize.X / 2) - 4), (float)80), Color.Black);
+            spriteBatch.DrawString(instructionFont, s, new Vector2((float)(textCenter.X - (textSize.X / 2) + 4), (float)80), Color.Black);
+            spriteBatch.DrawString(instructionFont, s, new Vector2((float)(textCenter.X - (textSize.X / 2)), (float)80 - 4), Color.Black);
+            spriteBatch.DrawString(instructionFont, s, new Vector2((float)(textCenter.X - (textSize.X / 2)), (float)80 + 4), Color.Black);
+            spriteBatch.DrawString(instructionFont, s, pos, Color.White);
         }
     }
 }

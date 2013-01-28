@@ -47,35 +47,38 @@ namespace HueWGJ2013.minigames
 
         public override void draw(SpriteBatch sb)
         {
-            sb.DrawString(font, "Pear", pos2, Color.Red);
-            sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
+            //sb.DrawString(font, "Pear", pos2, Color.Red);
+            //sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
             sb.Draw(img_tree, new Vector2(128.0f, 0.0f), Color.White);
             switch (state)
             {
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Grow a pear! (Mouse)");
-                    sb.DrawString(font, "Intro", pos, Color.Red);
+                    Game1.hueGraphics.drawInstructionText("Grow a pear!");
+                    Game1.hueGraphics.drawInstructionText("\n(Click to grow)");
+                    //sb.DrawString(font, "Intro", pos, Color.Red);
                     break;
                 case State.PLAY:                                     // Star drawing pears
                     if (stateTimer < 3f)
                     {
                         Game1.hueGraphics.drawInstructionText("GO!!!");
                     }
-                    sb.DrawString(font, "Playing", pos, Color.Red);
+                    //sb.DrawString(font, "Playing", pos, Color.Red);
                     for (int i = 0; i < pearPos.Count; i++)
                     {
                         sb.Draw(pears[i], pearPos[i], null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), pearScale[i], SpriteEffects.None, 0.0f);
                     }
                     break;
                 case State.LOSE:
-                    sb.DrawString(font, "LOSE!", pos, Color.Green);  // Pears persist through game end
+                    //sb.DrawString(font, "LOSE!", pos, Color.Green);  // Pears persist through game end
+                    Game1.hueGraphics.drawInstructionText("Fail!");
                     for (int i = 0; i < pearPos.Count; i++)
                     {
                         sb.Draw(pears[i], pearPos[i], null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), pearScale[i], SpriteEffects.None, 0.0f);
                     }
                     break;
                 case State.WIN:
-                    sb.DrawString(font, "WIN!", pos, Color.Green);
+                    //sb.DrawString(font, "WIN!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Win!");
                     for (int i = 0; i < pearPos.Count; i++)
                     {
                         sb.Draw(pears[i], pearPos[i], null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), pearScale[i], SpriteEffects.None, 0.0f);

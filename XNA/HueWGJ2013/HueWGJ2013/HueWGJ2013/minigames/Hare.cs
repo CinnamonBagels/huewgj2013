@@ -19,6 +19,7 @@ namespace HueWGJ2013.minigames
         Animation hare;
         Texture2D ground;
         Texture2D img_mate;
+        Texture2D img_heart;
 
         Vector2 pos = new Vector2(50, 50);
         Vector2 pos2 = new Vector2(25, 25);
@@ -56,18 +57,20 @@ namespace HueWGJ2013.minigames
             this.font = font;
             img_hare = Content.Load<Texture2D>("minigames/Hare/hare");
             img_mate = Content.Load<Texture2D>("minigames/Hare/mate");
+            img_heart = Content.Load<Texture2D>("minigames/Hare/heart");
             ground = Game1.hueGraphics.getSolidTexture();
             hare = new Animation(img_hare, 1, 3, 5);
         }
 
         public override void draw(SpriteBatch sb)
         {
-            sb.DrawString(font, "" + stateTimer, new Vector2(pos3.X, pos3.Y + 150.0f), Color.Red);
+            //sb.DrawString(font, "" + stateTimer, new Vector2(pos3.X, pos3.Y + 150.0f), Color.Red);
             switch (state)
             {
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Breed a hare! (Space)");
-                    sb.DrawString(font, "Intro", pos, Color.Red);
+                    Game1.hueGraphics.drawInstructionText("Breed a hare!");
+                    Game1.hueGraphics.drawInstructionText("\n(Space to jump)");
+                    //sb.DrawString(font, "Intro", pos, Color.Red);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.PLAY:
@@ -75,32 +78,35 @@ namespace HueWGJ2013.minigames
                     {
                         Game1.hueGraphics.drawInstructionText("GO!!!");
                     }
-                    sb.DrawString(font, "Playing", pos, Color.Red);
+                    //sb.DrawString(font, "Playing", pos, Color.Red);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.LOSE:
-                    sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    //sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Fail!");
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.WIN:
-                    sb.DrawString(font, "WIN! " + winX, pos, Color.Green);
+                    //sb.DrawString(font, "WIN! " + winX, pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Win!");
+                    sb.Draw(img_heart, new Vector2(512.0f - img_heart.Width/2.0f, 384.0f + img_heart.Height/2.0f), Color.White);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
             }
 
-            string gapString = "";
-            foreach (bool gap in gaps)
-            {
-                gapString = gapString + gap + " ";
-            }
-            sb.DrawString(font, alive + " Hare @ ", pos2, Color.Red);
+            //string gapString = "";
+            //foreach (bool gap in gaps)
+            //{
+            //    gapString = gapString + gap + " ";
+            //}
+            //sb.DrawString(font, alive + " Hare @ ", pos2, Color.Red);
 
             switch (state)
             {
                 case State.WIN:
                     offset = 0.0f;
                     //sb.Draw(img_hare, new Vector2((float)(winX), (float)(foot.Y - img_hare.Height)), Color.White);
-                    hare.goToFrame(3);
+                    hare.goToFrame(0);
                     hare.draw(sb, new Vector2((float)(winX+12.0), (float)(foot.Y - img_hare.Height - 8.0)));
                     break;
                 default:
@@ -319,7 +325,7 @@ namespace HueWGJ2013.minigames
                 }
                 else
                 {
-                    if (rand.Next(100) < 25)
+                    if (rand.Next(100) < 33)
                     {
                         mates.Enqueue(true);
                     }

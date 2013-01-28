@@ -28,7 +28,7 @@ namespace HueWGJ2013.minigames
         Vector2 powerWinPos;
         Vector2 powerCurPos;
         Vector2 ballerPos;
-        Vector2 hoopPos;
+        Vector2 hoopPos = new Vector2(768, 500);
 
         Vector2 pos2 = new Vector2(25, 25);
         Vector2 pos3 = new Vector2(250, 25);
@@ -62,12 +62,13 @@ namespace HueWGJ2013.minigames
 
         public override void draw(SpriteBatch sb)
         {
-            sb.DrawString(font, "BelAir", pos2, Color.Red);
-            sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
+            //sb.DrawString(font, "BelAir", pos2, Color.Red);
+            //sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
             switch (state)
             {
                 case State.START:
-                    Game1.hueGraphics.drawInstructionText("Prince of Bel-Air! (Space)");
+                    Game1.hueGraphics.drawInstructionText("Prince of Bel-Air!");
+                    Game1.hueGraphics.drawInstructionText("\n(Hold space to aim, release to shoot)");
                     anim_baller.draw(sb, ballerPos);
                     //sb.Draw(img_baller, ballerPos, Color.White);
                     //sb.Draw(pixel1, powerBg, Color.Red);
@@ -91,13 +92,15 @@ namespace HueWGJ2013.minigames
                     anim_baller.draw(sb, ballerPos);
                     //sb.Draw(img_baller, ballerPos, Color.White);
                     sb.Draw(img_hoop, hoopPos, Color.White);
-                    sb.DrawString(font, "WIN!", ballerPos, Color.Green);
+                    //sb.DrawString(font, "WIN!", ballerPos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Win!");
                     break;
                 case State.LOSE:
                     anim_baller.draw(sb, ballerPos);
                     //sb.Draw(img_baller, ballerPos, Color.White);
                     sb.Draw(img_hoop, hoopPos, Color.White);
-                    sb.DrawString(font, "LOSE!", ballerPos, Color.Green);
+                    //sb.DrawString(font, "LOSE!", ballerPos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Fail!");
                     break;
             }
         }
@@ -145,6 +148,7 @@ namespace HueWGJ2013.minigames
                     hasThrown = false;
                     barDir = 0;
                     //Ready to go!
+                    stateTimer = 0.0f;
                     state = State.INTRO;
                     break;
 

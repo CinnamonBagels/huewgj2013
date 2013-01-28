@@ -51,13 +51,14 @@ namespace HueWGJ2013.minigames
         public override void draw(SpriteBatch sb)
         {
             sb.Draw(atm, new Vector2(512 - atm.Width/2,  334 - atm.Height/2), Color.White);
-            sb.DrawString(font, "Trillionaire", pos2, Color.Red);
-            sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
+            //sb.DrawString(font, "Trillionaire", pos2, Color.Red);
+            //sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
             switch (state)
             {
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Become a trillionaire! (1/0 keys)");
-                    sb.DrawString(font, "Intro", pos, Color.Red);
+                    Game1.hueGraphics.drawInstructionText("Become a trillionaire!");
+                    Game1.hueGraphics.drawInstructionText("\n(1/0 keys to type amount)");
+                    //sb.DrawString(font, "Intro", pos, Color.Red);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.PLAY:
@@ -65,17 +66,19 @@ namespace HueWGJ2013.minigames
                     {
                         Game1.hueGraphics.drawInstructionText("GO!!!");
                     }
-                    sb.DrawString(font, "Playing", pos, Color.Red);
+                    //sb.DrawString(font, "Playing", pos, Color.Red);
                     sb.DrawString(font, total, moneyPos, Color.Green);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.LOSE:
-                    sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    //sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Fail!");
                     sb.DrawString(font, total, moneyPos, Color.Green);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.WIN:
-                    sb.DrawString(font, "WIN!", pos, Color.Green);
+                    //sb.DrawString(font, "WIN!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Win!");
                     sb.DrawString(font, total, moneyPos, Color.Green);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
@@ -100,6 +103,7 @@ namespace HueWGJ2013.minigames
                     zeroes = 0;
                     pressed1 = false;
 
+                    stateTimer = 0.0f;
                     state = State.INTRO;
                     break;
                 case State.INTRO:

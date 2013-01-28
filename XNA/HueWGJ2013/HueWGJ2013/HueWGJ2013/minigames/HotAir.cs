@@ -42,13 +42,14 @@ namespace HueWGJ2013.minigames
 
         public override void draw(SpriteBatch sb)
         {
-            sb.DrawString(font, "HotAir", pos2, Color.Red);
-            sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
+            //sb.DrawString(font, "HotAir", pos2, Color.Red);
+            //sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
             switch (state)
             {
                 case State.INTRO:
-                    Game1.hueGraphics.drawInstructionText("Blow hot air! (Up/Down Arrows)");
-                    sb.DrawString(font, "Intro", pos, Color.Red);
+                    Game1.hueGraphics.drawInstructionText("Blow hot air!");
+                    Game1.hueGraphics.drawInstructionText("\n(Up/Down Arrows to pump)");
+                    //sb.DrawString(font, "Intro", pos, Color.Red);
                     sb.Draw(img_balloon, balloonPos, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0.0f);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
@@ -57,17 +58,19 @@ namespace HueWGJ2013.minigames
                     {
                         Game1.hueGraphics.drawInstructionText("GO!!!");
                     }
-                    sb.DrawString(font, "Playing", pos, Color.Red);
+                    //sb.DrawString(font, "Playing", pos, Color.Red);
                     sb.Draw(img_balloon, balloonPos, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0.0f);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.LOSE:
-                    sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    //sb.DrawString(font, "LOSE!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Fail!");
                     sb.Draw(img_balloon, balloonPos, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0.0f);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.WIN:
-                    sb.DrawString(font, "WIN!", pos, Color.Green);
+                    //sb.DrawString(font, "WIN!", pos, Color.Green);
+                    Game1.hueGraphics.drawInstructionText("Win!");
                     sb.Draw(img_balloon, balloonPos, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0.0f);
                     //sb.Draw(img_happy, pos, Color.White);
                     break;
@@ -101,9 +104,16 @@ namespace HueWGJ2013.minigames
                     stateTimer += speed;
 
                     scale -= 0.08f * speed;
-                    balloonPos = new Vector2(balloonPos.X + (img_balloon.Width * 0.08f * speed)/2.0f, balloonPos.Y + (img_balloon.Height * 0.08f * speed));
+                    if (scale <= 0.05f)
+                    {
+                        scale = 0.05f;
+                    }
+                    else
+                    {
+                        balloonPos = new Vector2(balloonPos.X + (img_balloon.Width * 0.08f * speed) / 2.0f, balloonPos.Y + (img_balloon.Height * 0.08f * speed));
+                    }
 
-                    if (stateTimer >= gamePlayTimer || scale <= 0.05)
+                    if (stateTimer >= gamePlayTimer)
                     {
                         stateTimer = 0.0f;
                         state = State.LOSE;
