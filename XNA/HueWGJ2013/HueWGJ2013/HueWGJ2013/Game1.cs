@@ -251,8 +251,7 @@ namespace HueWGJ2013
         {
             GraphicsDevice.Clear(Color.SkyBlue);
 
-            spriteBatch.Begin();
-            
+            spriteBatch.Begin();            
             ((Minigame)mg[curGame]).draw(spriteBatch);
 
             spriteBatch.DrawString(defaultFont, "Current player: " + (currentPlayer + 1),
@@ -289,6 +288,14 @@ namespace HueWGJ2013
                 case State.WIN:
                     Game1.hueGraphics.drawInstructionText("Player " + winner + " wins!");
                     break;
+            }
+
+            spriteBatch.DrawString(defaultFont, "Current player: " + (currentPlayer + 1),
+                    new Vector2(25.0f, 359.0f), Color.Red);
+            for (int i = 0; i < playerScore.Count; i++)
+            {
+                spriteBatch.DrawString(defaultFont, "Player " + (i + 1) + ": "
+                    + playerScore[i], new Vector2(25.0f, 384.0f + i * 25.0f), Color.Red);
             }
             spriteBatch.End();
             // TODO: Add your drawing code here

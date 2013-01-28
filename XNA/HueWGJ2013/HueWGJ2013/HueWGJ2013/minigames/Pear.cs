@@ -32,6 +32,11 @@ namespace HueWGJ2013.minigames
         List<float> pearScale = new List<float>();
         List<bool> pearClicked = new List<bool>();
 
+        SoundEffect snd_win;
+        SoundEffect snd_lose;
+        Song bgm;
+        bool playedEndSound;
+
         public Pear(ContentManager c)
             : base(c)
         {
@@ -43,6 +48,9 @@ namespace HueWGJ2013.minigames
             this.font = font;
             img_pear = Content.Load<Texture2D>("minigames/Pear/pear");
             img_tree   = Content.Load<Texture2D>("minigames/Pear/tree");
+            snd_win = Content.Load<SoundEffect>("minigames/default_win");
+            snd_lose = Content.Load<SoundEffect>("minigames/default_fail");
+            bgm = Content.Load<Song>("minigames/Pear/bgm_jj2");
         }
 
         public override void draw(SpriteBatch sb)
@@ -96,6 +104,10 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.START:
+                    playedEndSound = false;
+                    MediaPlayer.Volume = .25f;
+                    MediaPlayer.Play(bgm);
+
                     gameStatus = -1;
 
                     // Pear lists init
@@ -169,6 +181,11 @@ namespace HueWGJ2013.minigames
                     break;
                 case State.WIN:
                     stateTimer += speed;
+                    if (!playedEndSound)
+                    {
+                        snd_win.Play();
+                        playedEndSound = true;
+                    }
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
@@ -178,6 +195,11 @@ namespace HueWGJ2013.minigames
                     break;
                 case State.LOSE:
                     stateTimer += speed;
+                    if (!playedEndSound)
+                    {
+                        snd_lose.Play();
+                        playedEndSound = true;
+                    }
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
@@ -186,6 +208,8 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.EXIT:
+                    MediaPlayer.Volume = 1f;
+                    MediaPlayer.Stop();
                     return gameStatus;
                 default:
                     break;
