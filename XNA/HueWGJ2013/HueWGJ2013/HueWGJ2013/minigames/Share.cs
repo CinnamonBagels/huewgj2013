@@ -21,10 +21,25 @@ namespace HueWGJ2013.minigames
         Random random = new Random();
 
         static Keys nextKey;
-        static int randomSentence;
+        static int sentenceNumber = 0;
         static int letterNumber = 0;
         static char currentLetter;
-        static List<string> sentence = new List<string>();
+        string sentence = "give me a share";
+        bool g = false;
+        bool i = false;
+        bool v = false;
+        bool e = false;
+        bool space = false;
+        bool m = false;
+        bool e2 = false;
+        bool space2 = false;
+        bool a = false;
+        bool space3 = false;
+        bool s = false;
+        bool h = false;
+        bool a2 = false;
+        bool r = false;
+        bool e3 = false;
 
 
         public Share(ContentManager c)
@@ -37,35 +52,22 @@ namespace HueWGJ2013.minigames
         {
             sb.DrawString(font, "Share", pos2, Color.Red);
             sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
+            sb.DrawString(font, "Type: give me a share", answerPos, Color.Red);
             switch (state)
             {
                 case State.START:
-                    sentence.Add("give me a share");
-                  //  sentence.Add("give me blizzard shares");
-                   // sentence.Add("give me microsoft shares");
-                  //  sentence.Add("give me EA shares");
-                    randomSentence = 0;
-                   // randomSentence = random.Next(0, 4);
-                    currentLetter = sentence[randomSentence][letterNumber];
                     break;
                 case State.INTRO:
                     sb.DrawString(font, "Intro", pos, Color.Red);
-                    //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.PLAY:
                     sb.DrawString(font, "Playing", pos, Color.Red);
-                   // sb.DrawString();
-                    //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.LOSE:
                     sb.DrawString(font, "LOSE!", pos, Color.Green);
-                  //  sb.DrawString();
-                    //sb.Draw(img_happy, pos, Color.White);
                     break;
                 case State.WIN:
                     sb.DrawString(font, "WIN!", pos, Color.Green);
-                   // sb.DrawString();
-                    //sb.Draw(img_happy, pos, Color.White);
                     break;
             }
         }
@@ -78,7 +80,8 @@ namespace HueWGJ2013.minigames
             switch(state)
             {
                 case State.START:
-                    answerPos = new Vector2(512.0f, 334.0f);
+                    gameStatus = -1;
+                    currentLetter = sentence[letterNumber];
                     state = State.INTRO;
                     break;
                 case State.INTRO:
@@ -90,6 +93,7 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.PLAY:
+                    stateTimer += speed;
                     if (stateTimer >= gamePlayTimer)
                     {
                         stateTimer = 0.0f;
@@ -177,31 +181,149 @@ namespace HueWGJ2013.minigames
                             case 'Z':
                                 nextKey = Keys.Z;
                                 break;
-                                
+                            case ' ':
+                                nextKey = Keys.Space;
+                                break; 
                         }
-                        if (kb.IsKeyDown(nextKey))
+                        if (g == true)
+                            if (i == true)
+                                if (v == true)
+                                    if (e == true)
+                                        if (space == true)
+                                            if (m == true)
+                                                if (e2 == true)
+                                                    if (space2 == true)
+                                                        if (a == true)
+                                                            if (space3 == true)
+                                                                if (s == true)
+                                                                    if (h == true)
+                                                                        if (a2 == true)
+                                                                            if (r == true)
+                                                                                if (e3 == true)
+                                                                                {
+                                                                                    stateTimer = 0.0f;
+                                                                                    state = State.WIN;
+                                                                                }
+
+                        if(kb.IsKeyDown(Keys.G))
                         {
-                            letterNumber++;
-                            currentLetter = sentence[randomSentence][letterNumber];
+                            g = true;
                         }
-                        else
+                        if(kb.IsKeyDown(Keys.I))
                         {
-                            state = State.LOSE;
+                            i = true;
                         }
-                        if (letterNumber == sentence[randomSentence].Length)
+                        if(kb.IsKeyDown(Keys.V))
                         {
-                            state = State.WIN;
-                            
+                            v = true;
                         }
+                        if (kb.IsKeyDown(Keys.E) || e == true || e2 == true)
+                        {
+                            e = true;
+
+                            if (kb.IsKeyDown(Keys.E) && e == true)
+                            {
+                                e2 = true;
+
+                                if (kb.IsKeyDown(Keys.E) && e == true && e2 == true)
+                                {
+                                    e3 = true;
+                                }
+                            }
+                        }
+                        if(kb.IsKeyDown(Keys.Space))
+                        {
+                            space = true;
+
+                            if(kb.IsKeyDown(Keys.Space) && space == true)
+                            {
+                                space2 = true;
+                                if(kb.IsKeyDown(Keys.Space) && space == true && space2 == true)
+                                {
+                                    space3 = true;
+                                }
+                            }
+                        }
+                        if(kb.IsKeyDown(Keys.M))
+                        {
+                            m = true;
+                        }
+                        if(kb.IsKeyDown(Keys.A))
+                        {
+                            a = true;
+
+                            if(kb.IsKeyDown(Keys.A) && a == true)
+                            {
+                                a2 = true;
+                            }
+                        }
+                        if(kb.IsKeyDown(Keys.S))
+                        {
+                            s = true;
+                        }
+                        if(kb.IsKeyDown(Keys.H))
+                        {
+                            h = true;
+                        }
+                        if(kb.IsKeyDown(Keys.R))
+                        {
+                            r = true;
+                        }
+
                     }
                     break;
                 case State.WIN:
-                    return 1;
-                case State.LOSE:
-                    return 0;
-                default:
+                    g = false;
+                    i = false;
+                    v = false;
+                    e = false;
+                    space = false;
+                    m = false;
+                    e2 = false;
+                    space2 = false;
+                    a = false;
+                    space3 = false;
+                    s = false;
+                    h = false;
+                    a2 = false;
+                    r = false;
+                    e3 = false;
+
+                    stateTimer += speed;
+                    if (stateTimer >= gameEndTimer)
+                    {
+                        stateTimer = 0.0f;
+                        gameStatus = 1;
+                        state = State.EXIT;
+                    }
                     break;
-                    
+                case State.LOSE:
+                    g = false;
+                    i = false;
+                    v = false;
+                    e = false;
+                    space = false;
+                    m = false;
+                    e2 = false;
+                    space2 = false;
+                    a = false;
+                    space3 = false;
+                    s = false;
+                    h = false;
+                    a2 = false;
+                    r = false;
+                    e3 = false;
+
+                    stateTimer += speed;
+                    if (stateTimer >= gameEndTimer)
+                    {
+                        stateTimer = 0.0f;
+                        gameStatus = 0;
+                        state = State.EXIT;
+                    }
+                    break;
+                case State.EXIT:
+                    return gameStatus;
                 }
             return -1;
         }
