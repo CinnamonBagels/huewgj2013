@@ -34,6 +34,12 @@ namespace HueWGJ2013.minigames
         Vector2 pos2 = new Vector2(25, 25);
         Vector2 pos3 = new Vector2(200, 25);
 
+
+        SoundEffect snd_win;
+        SoundEffect snd_lose;
+        Song bgm;
+        bool playedEndSound;
+
         //int fed;
         //int randomRectangle = 3;
 
@@ -49,6 +55,11 @@ namespace HueWGJ2013.minigames
             img_horsehead = Content.Load<Texture2D>("minigames/Mare/horsehead");
             img_horsebody = Content.Load<Texture2D>("minigames/Mare/horsebody");
             img_carrot = Content.Load<Texture2D>("minigames/Mare/carrot");
+
+            snd_win = Content.Load<SoundEffect>("minigames/Mare/yourock");
+            snd_lose = Content.Load<SoundEffect>("minigames/default_fail");
+            bgm = Content.Load<Song>("minigames/Mare/bgm_mlp");
+
         }
 
         public override void draw(SpriteBatch sb)
@@ -106,6 +117,9 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.START:
+                    playedEndSound = false;
+                    MediaPlayer.Play(bgm);
+                    MediaPlayer.Volume = .3F;
                     gameStatus = -1;
                     stateTimer = 0.0f;
                     state = State.INTRO;
@@ -158,6 +172,12 @@ namespace HueWGJ2013.minigames
                     carrotRectangle.Y = oPosY;
 
                     stateTimer += speed;
+
+                    if (!playedEndSound)
+                    {
+                        snd_win.Play(.5f, 0, 0);
+                        playedEndSound = true;
+                    }
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
@@ -168,6 +188,11 @@ namespace HueWGJ2013.minigames
 
                 case State.LOSE:
                     stateTimer += speed;
+                    if (!playedEndSound)
+                    {
+                        snd_lose.Play();
+                        playedEndSound = true;
+                    }
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
@@ -177,6 +202,7 @@ namespace HueWGJ2013.minigames
                     break;
 
                 case State.EXIT:
+                    MediaPlayer.Stop();
                     return gameStatus;
             }
             timer = 0.0f;
