@@ -49,22 +49,25 @@ namespace HueWGJ2013
         {            
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "HueWGJ2013Content";
-            //games.Add("Pear");
-            //mg["Pear"] = new Pear(Content);
-            //games.Add("HotAir");
-            //mg["HotAir"] = new HotAir(Content);
-            //games.Add("Trillionaire");
-            //mg["Trillionaire"] = new Trillionaire(Content);
+
+            games.Add("Pear");
+            mg["Pear"] = new Pear(Content);
+            games.Add("HotAir");
+            mg["HotAir"] = new HotAir(Content);
+            games.Add("Trillionaire");
+            mg["Trillionaire"] = new Trillionaire(Content);
+            games.Add("Foursquare");
+            mg["Foursquare"] = new Foursquare(Content);
             games.Add("BelAir");
             mg["BelAir"] = new BelAir(Content);
-            //games.Add("GrowDownThere");
-            //mg["GrowDownThere"] = new GrowDownThere(Content);
-            //games.Add("Hare");
-            //mg["Hare"] = new Hare(Content);
-            //games.Add("Mare");
-            //mg["Mare"] = new Mare(Content);
-            //games.Add("Share");
-            //mg["Share"] = new Share(Content);
+            games.Add("GrowDownThere");
+            mg["GrowDownThere"] = new GrowDownThere(Content);
+            games.Add("Hare");
+            mg["Hare"] = new Hare(Content);
+            games.Add("FightABear");
+            mg["FightABear"] = new FightABear(Content);
+            games.Add("Mare");
+            mg["Mare"] = new Mare(Content);
 
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;
@@ -168,7 +171,7 @@ namespace HueWGJ2013
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Color.SkyBlue);
             
             spriteBatch.Begin();
             spriteBatch.DrawString(defaultFont, "Current player: " + (currentPlayer + 1), 

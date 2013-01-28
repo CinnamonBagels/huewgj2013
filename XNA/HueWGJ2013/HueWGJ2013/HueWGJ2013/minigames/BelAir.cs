@@ -66,7 +66,7 @@ namespace HueWGJ2013.minigames
             sb.DrawString(font, "" + stateTimer, pos3, Color.Red);
             switch (state)
             {
-                case State.INTRO:
+                case State.START:
                     Game1.hueGraphics.drawInstructionText("Prince of Bel-Air! (Space)");
                     anim_baller.draw(sb, ballerPos);
                     //sb.Draw(img_baller, ballerPos, Color.White);

@@ -77,9 +77,14 @@ namespace HueWGJ2013.minigames
 
                     break;
                 case State.INTRO:
+                    Game1.hueGraphics.drawInstructionText("Raise a mare! (Click & Drag)");
                     sb.DrawString(font, "Intro", pos, Color.Red);
                     break;
                 case State.PLAY:
+                    if (stateTimer < 3f)
+                    {
+                        Game1.hueGraphics.drawInstructionText("GO!!!");
+                    }
                     sb.DrawString(font, "Playing", pos, Color.Red);
                     
                     sb.Draw(img_carrot, carrotRectangle, Color.White);
@@ -102,6 +107,7 @@ namespace HueWGJ2013.minigames
             {
                 case State.START:
                     gameStatus = -1;
+                    stateTimer = 0.0f;
                     state = State.INTRO;
                    // randomRectangle = random.Next(0, 4);
                     break;
@@ -139,6 +145,7 @@ namespace HueWGJ2013.minigames
                             }
                             randomRectangle = random.Next(0, 4);*/
 
+                            stateTimer = 0.0f;
                             state = State.WIN;
                         }
                         
