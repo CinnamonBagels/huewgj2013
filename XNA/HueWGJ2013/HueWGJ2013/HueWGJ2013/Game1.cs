@@ -50,24 +50,24 @@ namespace HueWGJ2013
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "HueWGJ2013Content";
 
-            //games.Add("Pear");
-            //mg["Pear"] = new Pear(Content);
-            //games.Add("HotAir");
-            //mg["HotAir"] = new HotAir(Content);
-            //games.Add("Trillionaire");
-            //mg["Trillionaire"] = new Trillionaire(Content);
+            games.Add("Pear");
+            mg["Pear"] = new Pear(Content);
+            games.Add("HotAir");
+            mg["HotAir"] = new HotAir(Content);
+            games.Add("Trillionaire");
+            mg["Trillionaire"] = new Trillionaire(Content);
             games.Add("Foursquare");
             mg["Foursquare"] = new Foursquare(Content);
-            //games.Add("BelAir");
-            //mg["BelAir"] = new BelAir(Content);
-            //games.Add("GrowDownThere");
-            //mg["GrowDownThere"] = new GrowDownThere(Content);
-            //games.Add("Hare");
-            //mg["Hare"] = new Hare(Content);
-            //games.Add("FightABear");
-            //mg["FightABear"] = new FightABear(Content);
-            //games.Add("Mare");
-            //mg["Mare"] = new Mare(Content);
+            games.Add("BelAir");
+            mg["BelAir"] = new BelAir(Content);
+            games.Add("GrowDownThere");
+            mg["GrowDownThere"] = new GrowDownThere(Content);
+            games.Add("Hare");
+            mg["Hare"] = new Hare(Content);
+            games.Add("FightABear");
+            mg["FightABear"] = new FightABear(Content);
+            games.Add("Mare");
+            mg["Mare"] = new Mare(Content);
 
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1024;
@@ -178,7 +178,7 @@ namespace HueWGJ2013
                     new Vector2(25.0f, 359.0f), Color.Red);
             for (int i = 0; i < playerScore.Count; i++)
             {
-                spriteBatch.DrawString(defaultFont, "Player " + (i+1) + ": "
+                spriteBatch.DrawString(defaultFont, "Player " + (i + 1) + ": "
                     + playerScore[i], new Vector2(25.0f, 384.0f + i * 25.0f), Color.Red);
             }
             ((Minigame)mg[curGame]).draw(spriteBatch);

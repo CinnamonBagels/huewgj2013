@@ -24,6 +24,11 @@ namespace HueWGJ2013.minigames
         float scale = 1.0f;
         Vector2 balloonPos = new Vector2(512.0f, 651.0f);
 
+        SoundEffect snd_win;
+        SoundEffect snd_lose;
+        Song bgm;
+        bool playedEndSound;
+
         // Pump mechanic
         bool down = false;
 
@@ -37,6 +42,9 @@ namespace HueWGJ2013.minigames
         {
             this.font = font;
             img_balloon = Content.Load<Texture2D>("minigames/HotAir/balloon");
+            snd_win = Content.Load<SoundEffect>("minigames/default_win");
+            snd_lose = Content.Load<SoundEffect>("minigames/default_fail");
+            bgm = Content.Load<Song>("minigames/HotAir/bgm_99");
             //img_sad   = Content.Load<Texture2D>("minigames/Example/sad");
         }
 
@@ -82,6 +90,8 @@ namespace HueWGJ2013.minigames
             switch (state)
             {
                 case State.START:
+                    playedEndSound = false;
+                    MediaPlayer.Play(bgm);
                     gameStatus = -1;
 
                     scale = 0.25f;
@@ -128,6 +138,11 @@ namespace HueWGJ2013.minigames
                     break;
                 case State.WIN:
                     stateTimer += speed;
+                    if (!playedEndSound)
+                    {
+                        snd_win.Play();
+                        playedEndSound = true;
+                    }
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
@@ -137,6 +152,11 @@ namespace HueWGJ2013.minigames
                     break;
                 case State.LOSE:
                     stateTimer += speed;
+                    if (!playedEndSound)
+                    {
+                        snd_lose.Play();
+                        playedEndSound = true;
+                    }
                     if (stateTimer >= gameEndTimer)
                     {
                         stateTimer = 0.0f;
@@ -145,6 +165,7 @@ namespace HueWGJ2013.minigames
                     }
                     break;
                 case State.EXIT:
+                    MediaPlayer.Stop();
                     return gameStatus;
                 default:
                     break;

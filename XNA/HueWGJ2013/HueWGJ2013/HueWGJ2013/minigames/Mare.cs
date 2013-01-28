@@ -203,6 +203,7 @@ namespace HueWGJ2013.minigames
 
                 case State.EXIT:
                     MediaPlayer.Stop();
+                    MediaPlayer.Volume = 1F;
                     return gameStatus;
             }
             timer = 0.0f;
